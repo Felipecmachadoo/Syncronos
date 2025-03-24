@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../assets/css/login.css" />
+    <title>Bem-vindo ao Syncronos!</title>
+  </head>
+  <body>
+    <div class="container">
+      <img src="../assets/images/Syncronos-branco.png" alt="" />
+      <h1>Bem-vindo ao Syncronos!</h1>
+      <h2>Informe seus dados para continuar</h2>
+      <div class="form-container">
+        <form action="../dashboard/sidebar.html" method="post">
+          <input
+            type="text"
+            name="email"
+            id="email-input"
+            placeholder="E-mail"
+          />
+          <div class="password-container">
+            <input
+              type="password"
+              name="password"
+              id="password-input"
+              placeholder="Senha"
+            />
+            <img
+              id="toggle-password"
+              class="eye-icon"
+              src="../assets/images/hide.png"
+              alt="Mostrar senha"
+            />
+          </div>
+          <p id="forget-password">
+            <a href="/esqueci-senha">Esqueceu sua senha?</a>
+          </p>
+          <p id="create-account">
+            <span class="text-white">Não tem uma conta?</span>
+            <span class="text-orange"
+              ><a href="../auth/register.html">Cadastre-se</a></span
+            >
+          </p>
+          <button class="continue" type="submit">Continuar</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const togglePassword = document.getElementById("toggle-password");
+      const passwordField = document.getElementById("password-input");
+
+      togglePassword.addEventListener("click", () => {
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+
+        togglePassword.src =
+          type === "password"
+            ? "../assets/images/hide.png"
+            : "../assets/images/witness.png";
+      });
+    </script>
+  </body>
+</html>

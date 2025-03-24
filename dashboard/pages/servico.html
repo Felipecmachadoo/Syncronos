@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulário de Serviço - Offcanvas</title>
+  </head>
+  <body>
+    <button class="btn-adicionar" id="btnAdicionar">Novo Serviço</button>
+
+    <div class="offcanvas-overlay" id="offcanvasOverlay"></div>
+    <div class="offcanvas" id="offcanvas">
+      <div class="offcanvas-header">
+        <h2 class="offcanvas-title">Adicionar Novo Serviço</h2>
+        <p class="offcanvas-subtitle">
+          Preencha os detalhes do serviço que deseja adicionar.
+        </p>
+      </div>
+      <div class="offcanvas-body">
+        <form id="formServico">
+          <div class="form-group">
+            <label for="nome" class="form-label">Nome do Serviço</label>
+            <input
+              type="text"
+              id="nome"
+              class="form-control"
+              placeholder="Digite o nome do serviço"
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="preco" class="form-label">Preço</label>
+            <input
+              type="text"
+              id="preco"
+              class="form-control"
+              placeholder="R$ 00,00"
+              required
+            />
+          </div>
+
+          <label for="duration" class="form-label">Duração do Serviço</label>
+          <div class="dropdown">
+            <div class="dropdown-toggle" id="selected-duration">5 Min</div>
+            <div class="dropdown-menu">
+              <!-- As opções serão geradas automaticamente via JavaScript -->
+            </div>
+          </div>
+
+          <input
+            type="hidden"
+            id="duration-input"
+            name="duration"
+            value="5 Min"
+          />
+
+          <div class="form-group">
+            <label for="descricao" class="form-label">Descrição</label>
+            <textarea
+              id="descricao"
+              class="form-control"
+              placeholder="Essa descrição será exibida para o cliente quando ele for escolher o serviço."
+            ></textarea>
+          </div>
+        </form>
+      </div>
+
+      <div class="offcanvas-footer">
+        <button class="btn btn-cancelar" id="btnCancelar">Cancelar</button>
+        <button class="btn btn-salvar" id="btnSalvar">Salvar</button>
+      </div>
+    </div>
+
+    <script src="../../assets/js/servico.js"></script>
+  </body>
+</html>
