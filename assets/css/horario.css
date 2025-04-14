@@ -1,0 +1,239 @@
+:root {
+  --cor-form: #232323;
+  --cor-gold: #ffd700;
+  --cor-white: white;
+  --cor-input-text: #6c6c6c;
+  --cor-background: #1b1b1b;
+  --cor-link-separator: #666666;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", Poppins, sans-serif;
+}
+
+.btn-adicionar {
+  background-color: var(--cor-gold);
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-adicionar:hover {
+  background-color: #ccad00;
+}
+
+.offcanvas-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.offcanvas {
+  position: fixed;
+  top: 0;
+  right: -600px;
+  width: 100%;
+  max-width: 600px;
+  height: 100%;
+  background-color: var(--cor-form);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.offcanvas.active {
+  right: 0;
+}
+
+.offcanvas-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.offcanvas-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--cor-link-separator);
+}
+
+.offcanvas-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cor-gold);
+}
+
+.offcanvas-subtitle {
+  font-size: 14px;
+  color: whi;
+  margin-top: 5px;
+}
+
+.offcanvas-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--cor-gold);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #3b3b3b;
+  border-radius: 8px;
+  font-size: 16px;
+  color: white;
+  background-color: #1d1d1d;
+  transition: border 0.3s ease;
+}
+
+.form-control::placeholder {
+  color: rgb(170, 170, 170);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #ffd700;
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: none;
+}
+
+#descricao:hover,
+#preco:hover,
+#nome:hover {
+  border-color: #ffd700;
+}
+
+/* Estilização do Dropdown */
+
+/* Estilo do container do dropdown */
+.dropdown {
+  position: relative;
+  width: 100%;
+  background-color: #1d1d1d;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #3b3b3b;
+  transition: border 0.3s ease;
+  margin-bottom: 20px;
+}
+
+/* Botão que exibe o valor selecionado */
+.dropdown-toggle {
+  padding: 12px;
+  color: white;
+  font-size: 16px;
+}
+
+.dropdown:hover {
+  border: 1px solid var(--cor-gold);
+}
+
+/* Caixa de opções */
+.dropdown-menu {
+  position: absolute;
+  margin-top: 3px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 150px; /* Limita o tamanho visível */
+  overflow-y: auto;
+  background-color: #1d1d1d;
+  border: 1px solid var(--cor-link-separator);
+  border-radius: 6px;
+  display: none; /* Inicia escondido */
+}
+
+/* Estilizando cada opção */
+.dropdown-option {
+  padding: 10px;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-option:hover {
+  background-color: #ffd700;
+  color: black;
+}
+
+/* Scrollbar personalizada */
+.dropdown-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background-color: #ffd700;
+  border-radius: 8px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.offcanvas-footer {
+  padding: 20px;
+  border-top: 1px solid var(--cor-link-separator);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-cancelar {
+  background-color: white;
+  color: black;
+  font-weight: 500;
+  border: none;
+}
+
+.btn-cancelar:hover {
+  background-color: rgb(170, 170, 170);
+}
+
+.btn-salvar {
+  background-color: var(--cor-gold);
+  color: black;
+  font-weight: 500;
+  border: none;
+}
+
+.btn-salvar:hover {
+  background-color: #ccad00;
+}
+
+@media (max-width: 480px) {
+  .offcanvas {
+    max-width: 100%;
+  }
+}

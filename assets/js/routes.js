@@ -30,13 +30,13 @@ function loadPageScript(page) {
       script.src = "../assets/js/servico.js"; // Caminho para o script da página de serviços
       break;
     case "calendario":
-      script.src = "../assets/js/script-calendario.js"; // Caso você tenha um script específico para o calendário
+      script.src = "../assets/js/calendario.js"; // Caso você tenha um script específico para o calendário
       break;
     case "horario":
-      script.src = "../assets/js/script-horario.js"; // Caso você tenha um script específico para o horário
+      script.src = "../assets/js/horario.js"; // Caso você tenha um script específico para o horário
       break;
     case "profissional":
-      script.src = "../assets/js/script-profissional.js"; // Caso você tenha um script específico para os profissionais
+      script.src = "../assets/js/profissional.js"; // Caso você tenha um script específico para os profissionais
       break;
     default:
       return;

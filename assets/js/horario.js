@@ -116,25 +116,13 @@ function configurarTudo() {
 
   // Configura o formatador de preço
   const precoInput = document.getElementById("preco");
-
   if (precoInput) {
-    precoInput.addEventListener("input", function () {
+    precoInput.oninput = function () {
       let valor = this.value.replace(/\D/g, "");
-
-      if (valor === "") {
-        this.value = "";
-        return;
-      }
-      valor = parseInt(valor).toString();
-      valor = valor.padStart(3, "0");
-
-      let reais = valor.slice(0, valor.length - 2);
-      let centavos = valor.slice(-2);
-
-      reais = reais.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-      this.value = `R$ ${reais},${centavos}`;
-    });
+      valor = valor.replace(/(\d)(\d{2})$/, "$1,$2");
+      valor = valor.replace(/(\d)(\d{3})(\d)/, "$1$2.$3");
+      this.value = "R$ " + valor;
+    };
   }
 
   eventosConfigurados = true;
