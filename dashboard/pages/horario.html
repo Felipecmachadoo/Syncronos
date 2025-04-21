@@ -1,77 +1,620 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Horario - Syncronos</title>
+    <title>Horários - Syncronos</title>
   </head>
   <body>
-    <button class="btn-adicionar" id="btnAdicionar">Atualizar Horários</button>
+    <form id="horario-form">
+      <div class="grid-container">
+        <!-- Coluna 1: Dias de Atendimento -->
+        <div class="grid-column">
+          <div class="column-header">Dias de Atendimento</div>
 
-    <div class="offcanvas-overlay" id="offcanvasOverlay"></div>
-    <div class="offcanvas" id="offcanvas">
-      <div class="offcanvas-header">
-        <h2 class="offcanvas-title">Adicionar Novo Serviço</h2>
-        <p class="offcanvas-subtitle">
-          Preencha os detalhes do serviço que deseja adicionar.
-        </p>
-      </div>
-      <div class="offcanvas-body">
-        <form id="formServico">
-          <div class="form-group">
-            <label for="nome" class="form-label">Nome do Serviço</label>
-            <input
-              type="text"
-              id="nome"
-              class="form-control"
-              placeholder="Digite o nome do serviço"
-              autocomplete="off"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="preco" class="form-label">Preço</label>
-            <input
-              type="text"
-              id="preco"
-              class="form-control"
-              placeholder="R$ 00,00"
-              required
-            />
-          </div>
-
-          <label for="duration" class="form-label">Duração do Serviço</label>
-          <div class="dropdown">
-            <div class="dropdown-toggle" id="selected-duration">5 Min</div>
-            <div class="dropdown-menu">
-              <!-- As opções serão geradas automaticamente via JavaScript -->
+          <!-- Segunda-feira -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="segunda"
+                class="inp-cbx"
+                name="dias[]"
+                value="segunda"
+              />
+              <label for="segunda" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Segunda-feira</span>
+              </label>
             </div>
           </div>
 
-          <input
-            type="hidden"
-            id="duration-input"
-            name="duration"
-            value="5 Min"
-          />
-
-          <div class="form-group">
-            <label for="descricao" class="form-label">Descrição</label>
-            <textarea
-              id="descricao"
-              class="form-control"
-              placeholder="Essa descrição será exibida para o cliente quando ele for escolher o serviço."
-            ></textarea>
+          <!-- Terça-feira -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="terca"
+                class="inp-cbx"
+                name="dias[]"
+                value="terca"
+              />
+              <label for="terca" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Terça-feira</span>
+              </label>
+            </div>
           </div>
-        </form>
+
+          <!-- Quarta-feira -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="quarta"
+                class="inp-cbx"
+                name="dias[]"
+                value="quarta"
+              />
+              <label for="quarta" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Quarta-feira</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Quinta-feira -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="quinta"
+                class="inp-cbx"
+                name="dias[]"
+                value="quinta"
+              />
+              <label for="quinta" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Quinta-feira</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sexta-feira -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="sexta"
+                class="inp-cbx"
+                name="dias[]"
+                value="sexta"
+              />
+              <label for="sexta" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Sexta-feira</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sábado -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="sabado"
+                class="inp-cbx"
+                name="dias[]"
+                value="sabado"
+              />
+              <label for="sabado" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Sábado</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Domingo -->
+          <div class="column-item">
+            <div class="checkbox-wrapper-46">
+              <input
+                type="checkbox"
+                id="domingo"
+                class="inp-cbx"
+                name="dias[]"
+                value="domingo"
+              />
+              <label for="domingo" class="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="10px" width="12px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+                <span>Domingo</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Horário de Abertura -->
+        <div class="grid-column">
+          <div class="column-header">Horário de Abertura</div>
+
+          <!-- Segunda-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="segunda"
+                  data-type="abertura"
+                  name="abertura_segunda"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-segunda-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Terça-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="terca"
+                  data-type="abertura"
+                  name="abertura_terca"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-terca-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quarta-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="quarta"
+                  data-type="abertura"
+                  name="abertura_quarta"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-quarta-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quinta-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="quinta"
+                  data-type="abertura"
+                  name="abertura_quinta"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-quinta-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sexta-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="sexta"
+                  data-type="abertura"
+                  name="abertura_sexta"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-sexta-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sábado -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="sabado"
+                  data-type="abertura"
+                  name="abertura_sabado"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-sabado-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Domingo -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="domingo"
+                  data-type="abertura"
+                  name="abertura_domingo"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-domingo-abertura"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 3: Horário de Fechamento -->
+        <div class="grid-column">
+          <div class="column-header">Horário de Fechamento</div>
+
+          <!-- Segunda-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="segunda"
+                  data-type="fechamento"
+                  name="fechamento_segunda"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-segunda-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Terça-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="terca"
+                  data-type="fechamento"
+                  name="fechamento_terca"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-terca-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quarta-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="quarta"
+                  data-type="fechamento"
+                  name="fechamento_quarta"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-quarta-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quinta-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="quinta"
+                  data-type="fechamento"
+                  name="fechamento_quinta"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-quinta-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sexta-feira -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="sexta"
+                  data-type="fechamento"
+                  name="fechamento_sexta"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-sexta-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Sábado -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="sabado"
+                  data-type="fechamento"
+                  name="fechamento_sabado"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-sabado-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Domingo -->
+          <div class="column-item">
+            <div class="dropdown-container">
+              <div class="input-icon-wrapper">
+                <input
+                  type="text"
+                  class="search-input horario-input"
+                  placeholder="00:00h"
+                  onfocus="showDropdown(event)"
+                  onkeyup="filterDropdown(event)"
+                  autocomplete="off"
+                  data-day="domingo"
+                  data-type="fechamento"
+                  name="fechamento_domingo"
+                />
+                <span class="input-icon">
+                  <span class="material-symbols-outlined" id="dropdown-icon">
+                    keyboard_arrow_down
+                  </span>
+                </span>
+              </div>
+
+              <div
+                class="dropdown-options horario-dropdown"
+                id="dropdown-domingo-fechamento"
+              >
+                <!-- opções geradas via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="offcanvas-footer">
-        <button class="btn btn-cancelar" id="btnCancelar">Cancelar</button>
-        <button class="btn btn-salvar" id="btnSalvar">Salvar</button>
+      <!-- Botão de Salvar -->
+      <div class="button-container">
+        <button type="button" id="save-button" class="save-button">
+          Salvar Horários
+        </button>
       </div>
-    </div>
+
+      <!-- Mensagem de feedback -->
+      <div id="feedback-message" class="feedback-message"></div>
+    </form>
 
     <script src="../../assets/js/horario.js"></script>
   </body>
