@@ -2,7 +2,7 @@
 let eventosConfigurados = false;
 
 // Função para configurar tudo uma única vez
-function configurarTudo() {
+function configurarServicos() {
   if (eventosConfigurados) return;
 
   console.log("Configurando eventos...");
@@ -155,15 +155,15 @@ const observer = new MutationObserver((mutations) => {
 
   if (elementosAdicionados) {
     eventosConfigurados = false;
-    configurarTudo();
+    configurarServicos();
   }
 });
 
 // Configuração inicial quando o DOM estiver pronto
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", configurarTudo);
+  document.addEventListener("DOMContentLoaded", configurarServicos);
 } else {
-  configurarTudo();
+  configurarServicos();
 }
 
 // Observa apenas adições/remoções de nós filhos
