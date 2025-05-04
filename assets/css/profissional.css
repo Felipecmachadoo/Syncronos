@@ -510,7 +510,7 @@ label {
 }
 
 input::placeholder {
-  color: white;
+  color: rgb(170, 170, 170);
 }
 
 /* Mensagem de feedback */
