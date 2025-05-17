@@ -107,11 +107,11 @@ function configurarServicos() {
       }
     };
 
-    document.onclick = (e) => {
+    document.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target)) {
         dropdownMenu.style.display = "none";
       }
-    };
+    });
   }
 
   // Configura o formatador de preço

@@ -1,54 +1,109 @@
-// Função para carregar páginas HTML dinamicamente e atualizar o título
 function loadPage(page, title) {
-  fetch(`./pages/${page}.html`)
-    .then((response) => {
-      if (!response.ok) throw new Error("Página não encontrada.");
-      return response.text();
-    })
-    .then((html) => {
-      document.getElementById("home-content").innerHTML = html;
-      document.title = title; // Atualiza o título da página
+  const container = document.getElementById("home-content");
+  if (!container) {
+    console.error("#home-content não encontrado!");
+    return;
+  }
 
-      // Carregar o script específico para a página (se existir)
+  // Atualiza o título
+  document.title = title;
+
+  // Mostra o loader centralizado
+  container.innerHTML = `
+    <div class="loader-container">
+      <div class="lds-spinner">
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+        <div></div><div></div><div></div><div></div><div></div><div></div>
+      </div>
+    </div>
+  `;
+
+  // Cria uma promise que resolve após 1 segundo (tempo mínimo)
+  const minimumLoadTime = new Promise((resolve) => setTimeout(resolve, 400));
+
+  // Remove CSS anterior se existir
+  const oldCss = document.getElementById("dynamic-css");
+  if (oldCss) oldCss.remove();
+
+  // Cria novo link para CSS
+  const cssLink = document.createElement("link");
+  cssLink.rel = "stylesheet";
+  cssLink.id = "dynamic-css";
+  cssLink.href = `../assets/css/${page}.css`;
+
+  // Combina o carregamento com o tempo mínimo
+  Promise.all([
+    minimumLoadTime,
+    new Promise((resolve) => {
+      cssLink.onload = resolve;
+      cssLink.onerror = resolve; // Continua mesmo se o CSS falhar
+      document.head.appendChild(cssLink);
+    }),
+    fetch(`./pages/${page}.html`).then((res) =>
+      res.ok ? res.text() : Promise.reject("Erro ao carregar HTML")
+    ),
+  ])
+    .then(([_, __, html]) => {
+      container.innerHTML = html;
       loadPageScript(page);
     })
-    .catch((error) => {
-      document.getElementById(
-        "home-content"
-      ).innerHTML = `<p>Erro ao carregar página: ${error.message}</p>`;
-      document.title = "Erro - Syncronos"; // Define um título padrão em caso de erro
+    .catch((err) => {
+      console.error(err);
+      container.innerHTML = `<p>Erro ao carregar conteúdo: ${
+        err.message || err
+      }</p>`;
     });
 }
 
 // Função para carregar o script específico da página
 function loadPageScript(page) {
-  const script = document.createElement("script");
+  let scriptSrc;
 
-  // Verifica qual página está sendo carregada e atribui o script correto
   switch (page) {
     case "servico":
-      script.src = "../assets/js/servico.js"; // Caminho para o script da página de serviços
+      scriptSrc = "../assets/js/servico.js";
       break;
     case "calendario":
-      script.src = "../assets/js/calendario.js"; // Caso você tenha um script específico para o calendário
+      scriptSrc = "../assets/js/calendario.js";
       break;
     case "horario":
-      script.src = "../assets/js/horario.js"; // Caso você tenha um script específico para o horário
+      scriptSrc = "../assets/js/horario.js";
       break;
     case "profissional":
-      script.src = "../assets/js/profissional.js"; // Caso você tenha um script específico para os profissionais
+      scriptSrc = "../assets/js/profissional.js";
       break;
     default:
-      return;
+      return; // Nenhum script para essa página
   }
 
-  // Após o script ser carregado, ele é adicionado ao documento
-  script.onload = function () {
-    console.log(`Script para a página ${page} carregado com sucesso.`);
+  // Evita carregar duplicado
+  if (document.querySelector(`script[src="${scriptSrc}"]`)) {
+    console.log(`Script da página ${page} já carregado.`);
+    return;
+  }
+
+  const script = document.createElement("script");
+  script.src = scriptSrc;
+  script.defer = true;
+
+  script.onload = () => {
+    console.log(`Script da página ${page} carregado com sucesso.`);
   };
 
-  // Adiciona o script ao body da página
   document.body.appendChild(script);
+}
+
+function loadPageCSS(page) {
+  // Remove o CSS dinâmico anterior, se houver
+  const existingLink = document.getElementById("dynamic-css");
+  if (existingLink) existingLink.remove();
+
+  // Cria e insere um novo link de CSS
+  const link = document.createElement("link");
+  link.id = "dynamic-css";
+  link.rel = "stylesheet";
+  link.href = `../assets/css/${page}.css`; // Ex: servico.css, calendario.css...
+  document.head.appendChild(link);
 }
 
 // Configuração das rotas do Mithril com atualização do título
