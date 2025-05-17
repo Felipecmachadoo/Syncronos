@@ -15,6 +15,12 @@ body {
   padding: 0;
 }
 
+.titulo-horario {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
 /* Grid Layout */
 .grid-container {
   display: grid;
@@ -244,61 +250,6 @@ input::placeholder {
   color: rgb(170, 170, 170);
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .grid-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, auto);
-  }
-
-  .grid-column {
-    border-right: none;
-    border-bottom: 2px solid var(--cor-border);
-  }
-
-  .grid-column:last-child {
-    border-bottom: none;
-  }
-
-  .column-header {
-    text-align: center;
-    padding: 15px;
-  }
-
-  .column-item {
-    padding: 12px;
-  }
-
-  .dropdown-container {
-    width: 100%;
-  }
-
-  .input-icon-wrapper {
-    width: 100%;
-  }
-}
-
-/* Para telas muito pequenas */
-@media (max-width: 480px) {
-  .column-item {
-    padding: 10px 8px;
-  }
-
-  .search-input {
-    font-size: 14px;
-    padding: 8px 20px 8px 8px;
-  }
-
-  .input-icon span {
-    font-size: 20px;
-  }
-
-  .dropdown-options {
-    width: 90%;
-    left: 5%;
-  }
-}
-
 /* CSS Botão de Salvar */
 
 .button-container {
@@ -370,5 +321,60 @@ input::placeholder {
   .save-button {
     width: 80%;
     padding: 10px 20px;
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .grid-column {
+    border-right: none;
+    border-bottom: 2px solid var(--cor-border);
+  }
+
+  .grid-column:last-child {
+    border-bottom: none;
+  }
+
+  .column-header {
+    text-align: center;
+    padding: 15px;
+  }
+
+  .column-item {
+    padding: 12px;
+  }
+
+  .dropdown-container {
+    width: 100%;
+  }
+
+  .input-icon-wrapper {
+    width: 100%;
+  }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 480px) {
+  .column-item {
+    padding: 10px 8px;
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 8px 20px 8px 8px;
+  }
+
+  .input-icon span {
+    font-size: 20px;
+  }
+
+  .dropdown-options {
+    width: 90%;
+    left: 5%;
   }
 }
