@@ -1,5 +1,104 @@
-<html>
-  <body>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="stylesheet" href="../../assets/css/sidebar.css">
+  <link rel="stylesheet" href="../../assets/css/horario.css">
+  <title>Horários - Syncronos</title>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="../../assets/images/Syncronos-branco.png" alt="Logo-Syncronos" />
+      <h2>Syncronos</h2>
+    </div>
+    <ul class="sidebar-links">
+      <h4>
+        <span>Principal</span>
+        <div class="menu-separator"></div>
+      </h4>
+
+      <li>
+        <a href="./dashboard.php">
+          <span class="material-symbols-outlined"> dashboard </span>
+          Dashboard
+        </a>
+      </li>
+
+      <li>
+        <a href="./calendario.php">
+          <span class="material-symbols-outlined">calendar_month</span>
+          Calendário
+        </a>
+      </li>
+
+      <h4>
+        <span>Cadastros</span>
+        <div class="menu-separator"></div>
+      </h4>
+
+      <li>
+        <a href="./horario.php">
+          <span class="material-symbols-outlined">search_activity</span>
+          Horários
+        </a>
+      </li>
+
+      <li>
+        <a href="./servico.php">
+          <span class="material-symbols-outlined">build</span> Serviços
+        </a>
+      </li>
+
+      <li>
+        <a href="./profissional.php">
+          <span class="material-symbols-outlined">person_add</span>
+          Profissionais
+        </a>
+      </li>
+
+      <h4>
+        <span>Conta</span>
+        <div class="menu-separator"></div>
+      </h4>
+
+      <li>
+        <a href="#!/perfil">
+          <span class="material-symbols-outlined">account_circle</span> Perfil
+        </a>
+      </li>
+
+      <li>
+        <a href="#!/configuracoes">
+          <span class="material-symbols-outlined">settings</span>
+          Configurações
+        </a>
+      </li>
+
+      <li>
+        <a href="../app/logout.php">
+          <span class="material-symbols-outlined">logout</span> Sair
+        </a>
+      </li>
+    </ul>
+    <div class="user-account">
+      <div class="user-profile">
+        <img src="../../assets/images/logo300.png" alt="Foto-de-perfil" />
+        <div class="user-detail">
+          <h3>Dark Prete's</h3>
+          <span>Administrador</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="home-content">
     <form id="horario-form">
       <h1 class="titulo-horario">Horários de Funcionamento</h1>
       <div class="grid-container">
@@ -15,8 +114,7 @@
                 id="segunda"
                 class="inp-cbx"
                 name="dias[]"
-                value="segunda"
-              />
+                value="segunda" />
               <label for="segunda" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -36,8 +134,7 @@
                 id="terca"
                 class="inp-cbx"
                 name="dias[]"
-                value="terca"
-              />
+                value="terca" />
               <label for="terca" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -57,8 +154,7 @@
                 id="quarta"
                 class="inp-cbx"
                 name="dias[]"
-                value="quarta"
-              />
+                value="quarta" />
               <label for="quarta" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -78,8 +174,7 @@
                 id="quinta"
                 class="inp-cbx"
                 name="dias[]"
-                value="quinta"
-              />
+                value="quinta" />
               <label for="quinta" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -99,8 +194,7 @@
                 id="sexta"
                 class="inp-cbx"
                 name="dias[]"
-                value="sexta"
-              />
+                value="sexta" />
               <label for="sexta" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -120,8 +214,7 @@
                 id="sabado"
                 class="inp-cbx"
                 name="dias[]"
-                value="sabado"
-              />
+                value="sabado" />
               <label for="sabado" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -141,8 +234,7 @@
                 id="domingo"
                 class="inp-cbx"
                 name="dias[]"
-                value="domingo"
-              />
+                value="domingo" />
               <label for="domingo" class="cbx">
                 <span>
                   <svg viewBox="0 0 12 10" height="10px" width="12px">
@@ -172,8 +264,7 @@
                   autocomplete="off"
                   data-day="segunda"
                   data-type="abertura"
-                  name="abertura_segunda"
-                />
+                  name="abertura_segunda" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -183,8 +274,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-segunda-abertura"
-              >
+                id="dropdown-segunda-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -203,8 +293,7 @@
                   autocomplete="off"
                   data-day="terca"
                   data-type="abertura"
-                  name="abertura_terca"
-                />
+                  name="abertura_terca" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -214,8 +303,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-terca-abertura"
-              >
+                id="dropdown-terca-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -234,8 +322,7 @@
                   autocomplete="off"
                   data-day="quarta"
                   data-type="abertura"
-                  name="abertura_quarta"
-                />
+                  name="abertura_quarta" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -245,8 +332,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-quarta-abertura"
-              >
+                id="dropdown-quarta-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -265,8 +351,7 @@
                   autocomplete="off"
                   data-day="quinta"
                   data-type="abertura"
-                  name="abertura_quinta"
-                />
+                  name="abertura_quinta" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -276,8 +361,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-quinta-abertura"
-              >
+                id="dropdown-quinta-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -296,8 +380,7 @@
                   autocomplete="off"
                   data-day="sexta"
                   data-type="abertura"
-                  name="abertura_sexta"
-                />
+                  name="abertura_sexta" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -307,8 +390,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-sexta-abertura"
-              >
+                id="dropdown-sexta-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -327,8 +409,7 @@
                   autocomplete="off"
                   data-day="sabado"
                   data-type="abertura"
-                  name="abertura_sabado"
-                />
+                  name="abertura_sabado" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -338,8 +419,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-sabado-abertura"
-              >
+                id="dropdown-sabado-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -358,8 +438,7 @@
                   autocomplete="off"
                   data-day="domingo"
                   data-type="abertura"
-                  name="abertura_domingo"
-                />
+                  name="abertura_domingo" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -369,8 +448,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-domingo-abertura"
-              >
+                id="dropdown-domingo-abertura">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -394,8 +472,7 @@
                   autocomplete="off"
                   data-day="segunda"
                   data-type="fechamento"
-                  name="fechamento_segunda"
-                />
+                  name="fechamento_segunda" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -405,8 +482,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-segunda-fechamento"
-              >
+                id="dropdown-segunda-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -425,8 +501,7 @@
                   autocomplete="off"
                   data-day="terca"
                   data-type="fechamento"
-                  name="fechamento_terca"
-                />
+                  name="fechamento_terca" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -436,8 +511,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-terca-fechamento"
-              >
+                id="dropdown-terca-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -456,8 +530,7 @@
                   autocomplete="off"
                   data-day="quarta"
                   data-type="fechamento"
-                  name="fechamento_quarta"
-                />
+                  name="fechamento_quarta" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -467,8 +540,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-quarta-fechamento"
-              >
+                id="dropdown-quarta-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -487,8 +559,7 @@
                   autocomplete="off"
                   data-day="quinta"
                   data-type="fechamento"
-                  name="fechamento_quinta"
-                />
+                  name="fechamento_quinta" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -498,8 +569,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-quinta-fechamento"
-              >
+                id="dropdown-quinta-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -518,8 +588,7 @@
                   autocomplete="off"
                   data-day="sexta"
                   data-type="fechamento"
-                  name="fechamento_sexta"
-                />
+                  name="fechamento_sexta" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -529,8 +598,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-sexta-fechamento"
-              >
+                id="dropdown-sexta-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -549,8 +617,7 @@
                   autocomplete="off"
                   data-day="sabado"
                   data-type="fechamento"
-                  name="fechamento_sabado"
-                />
+                  name="fechamento_sabado" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -560,8 +627,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-sabado-fechamento"
-              >
+                id="dropdown-sabado-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -580,8 +646,7 @@
                   autocomplete="off"
                   data-day="domingo"
                   data-type="fechamento"
-                  name="fechamento_domingo"
-                />
+                  name="fechamento_domingo" />
                 <span class="input-icon">
                   <span class="material-symbols-outlined" id="dropdown-icon">
                     keyboard_arrow_down
@@ -591,8 +656,7 @@
 
               <div
                 class="dropdown-options horario-dropdown"
-                id="dropdown-domingo-fechamento"
-              >
+                id="dropdown-domingo-fechamento">
                 <!-- opções geradas via JS -->
               </div>
             </div>
@@ -610,7 +674,9 @@
       <!-- Mensagem de feedback -->
       <div id="feedback-message" class="feedback-message"></div>
     </form>
+  </div>
 
-    <script src="../../assets/js/horario.js"></script>
-  </body>
+  <script src="../../assets/js/horario.js"></script>
+</body>
+
 </html>
