@@ -38,26 +38,6 @@ body {
   margin-bottom: 20px;
 }
 
-.alert {
-  padding: 12px 20px;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  border: 1px solid transparent;
-  font-weight: 500;
-}
-
-.alert-success {
-  background-color: #2d4734;
-  border-color: #3a6147;
-  color: #a8e6b0;
-}
-
-.alert-danger {
-  background-color: #4b1c1c;
-  border-color: #993c3c;
-  color: #ffc0c0;
-}
-
 #calendar {
   max-height: 900px;
   overflow-y: auto;
@@ -220,6 +200,50 @@ body {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
+}
+
+.btnEditButton {
+  background-color: #f39c12; /* Laranja */
+  color: black;
+  font-weight: 600;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btnDeleteButton {
+  background-color: #e74c3c; /* Laranja */
+  color: black;
+  font-weight: 600;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btnViewEvento {
+  background-color: white; /* Laranja */
+  color: black;
+  font-weight: 600;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btnEditEvento {
+  background-color: var(--cor-gold); /* Laranja */
+  color: black;
+  font-weight: 600;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

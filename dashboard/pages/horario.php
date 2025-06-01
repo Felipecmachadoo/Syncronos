@@ -7,6 +7,7 @@
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
   <link rel="stylesheet" href="../../assets/css/sidebar.css">
   <link rel="stylesheet" href="../../assets/css/horario.css">
   <title>Horários - Syncronos</title>
@@ -676,6 +677,7 @@
     </form>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="../../assets/js/horario.js"></script>
 </body>
 

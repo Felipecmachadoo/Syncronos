@@ -1,6 +1,14 @@
 // Variável para controlar se já configuramos os eventos
 let eventosConfigurados = false;
 
+const notyf = new Notyf({
+  duration: 2000,
+  position: {
+    x: "right",
+    y: "top",
+  },
+});
+
 // Função para configurar tudo uma única vez
 function configurarServicos() {
   if (eventosConfigurados) return;
@@ -47,7 +55,7 @@ function configurarServicos() {
         console.log("Serviço salvo:", servico);
         formServico.reset();
         fecharOffcanvas();
-        alert("Serviço adicionado com sucesso!");
+        notyf.success("Serviço adicionado com sucesso!");
       } else {
         formServico.reportValidity();
       }

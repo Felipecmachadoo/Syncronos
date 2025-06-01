@@ -250,24 +250,26 @@ function configurarHorarios() {
     return nomes[dia] || dia;
   }
 
+  const notyf = new Notyf({
+    duration: 4000,
+    position: {
+      x: "right",
+      y: "top",
+    },
+  });
+
   // Função para mostrar feedback ao usuário
   function mostrarFeedback(mensagem, tipo) {
-    const feedbackElement = document.getElementById("feedback-message");
-    if (!feedbackElement) {
-      return;
+    if (tipo === "success") {
+      notyf.success(mensagem);
+    } else if (tipo === "error") {
+      notyf.error(mensagem);
+    } else {
+      notyf.open({
+        type: "info",
+        message: mensagem,
+      });
     }
-
-    feedbackElement.textContent = mensagem;
-    feedbackElement.className = "feedback-message";
-    feedbackElement.classList.add(tipo);
-
-    // Garantir que a mensagem seja visível
-    feedbackElement.style.opacity = "1";
-
-    // Esconder a mensagem após 5 segundos
-    setTimeout(() => {
-      feedbackElement.style.opacity = "0";
-    }, 5000);
   }
 
   // Função para salvar os dados (exemplo com localStorage)

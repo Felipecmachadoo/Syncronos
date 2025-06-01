@@ -513,31 +513,6 @@ input::placeholder {
   color: rgb(170, 170, 170);
 }
 
-/* Mensagem de feedback */
-.feedback-message {
-  text-align: center;
-  margin: 15px 0;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.feedback-message.success {
-  background-color: rgba(46, 204, 113, 0.2);
-  color: #2ecc71;
-  border: 1px solid #2ecc71;
-  opacity: 1;
-}
-
-.feedback-message.error {
-  background-color: rgba(231, 76, 60, 0.2);
-  color: #e74c3c;
-  border: 1px solid #e74c3c;
-  opacity: 1;
-}
-
 /* Responsividade */
 @media (max-width: 768px) {
   .profissional-offcanvas {

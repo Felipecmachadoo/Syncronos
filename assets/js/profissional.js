@@ -1,6 +1,14 @@
 // Variável para controlar se já configuramos os eventos
 let profissionalConfigurado = false;
 
+const notyf = new Notyf({
+  duration: 3000,
+  position: {
+    x: "right",
+    y: "top",
+  },
+});
+
 // Função para configurar tudo uma única vez
 function configurarProfissional() {
   if (profissionalConfigurado) return;
@@ -119,11 +127,11 @@ function configurarProfissional() {
   // VALIDAÇÃO DE FORMULÁRIOS
   function validateCadastro() {
     if (!elements.nome.value.trim()) {
-      alert("Erro: Nome do profissional é obrigatório");
+      notyf.error("Erro: Nome do profissional é obrigatório");
       return false;
     }
     if (!elements.profissao.value.trim()) {
-      alert("Erro: O campo de profissão é obrigatório");
+      notyf.error("Erro: O campo profissão é obrigatório");
       return false;
     }
     return true;
@@ -135,7 +143,7 @@ function configurarProfissional() {
     );
 
     if (diasSelecionados.length === 0) {
-      alert("Erro: Selecione pelo menos um dia de atendimento");
+      notyf.error("Erro: Selecione pelo menos um dia de atendimento");
       return false;
     }
 
@@ -159,7 +167,7 @@ function configurarProfissional() {
 
       // Validar campos obrigatórios
       if (!abertura || !fechamento || !inicioIntervalo || !fimIntervalo) {
-        alert(`Erro: Preencha todos os horários para ${getDiaNome(dia)}`);
+        notyf.error(`Erro: Preencha todos os horários para ${getDiaNome(dia)}`);
         return false;
       }
     }
@@ -334,7 +342,7 @@ function configurarProfissional() {
 
     // Salvar no localStorage
     storage.save(formData);
-    alert("Dados salvos com sucesso!");
+    notyf.success("Dados salvos com sucesso!");
     setTimeout(closeOffcanvas, 1000);
   }
 

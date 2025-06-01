@@ -7,6 +7,7 @@
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
   <link rel="stylesheet" href="../../assets/css/sidebar.css">
   <link href="../../assets/css/calendario.css" rel="stylesheet">
   <title>Agenda - FullCalendar</title>
@@ -186,9 +187,9 @@
 
               <div id="msgEditEvento" class="message-container"></div>
 
-              <button type="button" id="btnViewEvento">Cancelar</button>
+              <button type="button" id="btnViewEvento" class="btnViewEvento">Cancelar</button>
 
-              <button type="submit" id="btnEditEvento">Salvar</button>
+              <button type="submit" id="btnEditEvento" class="btnEditEvento">Salvar</button>
             </form>
           </div>
         </div>
@@ -250,6 +251,7 @@
 
   <script src="../../assets/js/calendario/index.global.min.js"></script>
   <script src="../../assets/js/calendario/core/locales-all.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src='../../assets/js/calendario.js'></script>
 </body>
 

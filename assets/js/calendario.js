@@ -119,6 +119,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Renderizar o calendário
   calendar.render();
 
+  const notyf = new Notyf({
+    duration: 2000,
+    position: {
+      x: "right",
+      y: "top",
+    },
+  });
+
   // Converter a data
   function converterData(data) {
     // Converter a string em um objeto Date
@@ -206,10 +214,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Acessa o IF quando não cadastrar com sucesso
       if (!resposta["status"]) {
         // Enviar a mensagem para o HTML
-        msgCadEvento.innerHTML = `<div class="alert alert-danger">${resposta["msg"]}</div>`;
+        notyf.error(resposta["msg"]);
       } else {
         // Enviar a mensagem para o HTML
-        msg.innerHTML = `<div class="alert alert-success">${resposta["msg"]}</div>`;
+        notyf.success(resposta["msg"]);
 
         // Enviar a mensagem para o HTML
         msgCadEvento.innerHTML = "";
@@ -319,10 +327,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Acessa o IF quando não editar com sucesso
       if (!resposta["status"]) {
         // Enviar a mensagem para o HTML
-        msgEditEvento.innerHTML = `<div class="aler alert-danger">${resposta["msg"]}</div>`;
+        notyf.error(resposta["msg"]);
       } else {
         // Enviar a mensagem para o HTML
-        msg.innerHTML = `<div class="alert alert-success">${resposta["msg"]}</div>`;
+        notyf.success(resposta["msg"]);
 
         // Enviar a mensagem para o HTML
         msgEditEvento.innerHTML = "";
@@ -387,10 +395,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Acessa o IF quando não cadastrar com sucesso
         if (!resposta["status"]) {
           // Enviar a mensagem para o HTML
-          msgViewEvento.innerHTML = `<div class="alert alert-danger">${resposta["msg"]}</div>`;
+          notyf.error(resposta["msg"]);
         } else {
           // Enviar a mensagem para o HTML
-          msg.innerHTML = `<div class="alert alert-success">${resposta["msg"]}</div>`;
+          notyf.success(resposta["msg"]);
 
           // Enviar a mensagem para o HTML
           msgViewEvento.innerHTML = "";

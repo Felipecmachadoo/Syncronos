@@ -16,6 +16,7 @@ body {
 }
 
 .titulo-horario {
+  color: var(--cor-white);
   display: flex;
   justify-content: center;
   margin-top: 25px;

@@ -7,6 +7,7 @@
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
   <link rel="stylesheet" href="../../assets/css/sidebar.css">
   <link rel="stylesheet" href="../../assets/css/servico.css">
   <title>Serviços - Syncronos</title>
@@ -98,7 +99,7 @@
     </div>
   </aside>
 
-  <div class="home-content">
+  <div class="home-content" id="home-content">
     <button class="btn-adicionar" id="btnAdicionar">Novo Serviço</button>
 
     <div class="offcanvas-overlay" id="offcanvasOverlay"></div>
@@ -162,6 +163,7 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="../../assets/js/servico.js"></script>
 </body>
 

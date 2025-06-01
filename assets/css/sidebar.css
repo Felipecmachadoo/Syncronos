@@ -169,6 +169,7 @@ body {
 }
 
 .home-content {
+  margin-left: 85px;
   position: relative;
   max-height: 100vh;
   overflow: auto;
