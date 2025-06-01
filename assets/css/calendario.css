@@ -290,6 +290,10 @@ body {
   animation: fadeIn 0.3s ease-out;
 }
 
+.fc-toolbar {
+  text-transform: capitalize;
+}
+
 .fc-theme-standard .fc-scrollgrid {
   border-radius: 8px;
   overflow: hidden;
