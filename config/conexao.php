@@ -1,17 +1,26 @@
 <?php
+class Conexao
+{
+    private $host = "localhost";
+    private $db_name = "syncronos";
+    private $username = "root";
+    private $password = "";
+    public $conn;
 
-// Configurações do banco de dados
-$host = 'localhost';
-$dbname = 'calendario';
-$username = 'root';
-$password = '';
+    public function conectar()
+    {
+        $this->conn = null;
+        try {
+            $this->conn = new PDO(
+                "mysql:host={$this->host};dbname={$this->db_name}",
+                $this->username,
+                $this->password
+            );
+            $this->conn->exec("set names utf8");
+        } catch (PDOException $e) {
+            echo "Erro na conexão: " . $e->getMessage();
+        }
 
-try {
-    // Criar conexão PDO
-    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-
-    // Configurar o PDO para lançar exceções em caso de erro
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro na conexão: " . $e->getMessage());
+        return $this->conn;
+    }
 }

@@ -1,3 +1,9 @@
+<?php
+require_once '../../controller/ServicoController.php';
+
+$controller = new ServicoController();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -111,12 +117,14 @@
         </p>
       </div>
       <div class="offcanvas-body">
-        <form id="formServico">
+        <form id="formServico" method="POST" action="../../public/index.php">
+          <input type="hidden" name="rota" value="salvarServico" />
           <div class="form-group">
             <label for="nome" class="form-label">Nome do Serviço</label>
             <input
               type="text"
               id="nome"
+              name="nome"
               class="form-control"
               placeholder="Digite o nome do serviço"
               autocomplete="off"
@@ -128,6 +136,7 @@
             <input
               type="text"
               id="preco"
+              name="preco"
               class="form-control"
               placeholder="R$ 00,00"
               required />
@@ -144,7 +153,7 @@
           <input
             type="hidden"
             id="duration-input"
-            name="duration"
+            name="duracao"
             value="5 Min" />
 
           <div class="form-group">
@@ -152,15 +161,16 @@
             <textarea
               id="descricao"
               class="form-control"
+              name="descricao"
               placeholder="Essa descrição será exibida para o cliente quando ele for escolher o serviço."></textarea>
           </div>
-        </form>
       </div>
 
       <div class="offcanvas-footer">
         <button class="btn btn-cancelar" id="btnCancelar">Cancelar</button>
-        <button class="btn btn-salvar" id="btnSalvar">Salvar</button>
+        <button type="submit" class="btn btn-salvar" id="btnSalvar">Salvar</button>
       </div>
+      </form>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>

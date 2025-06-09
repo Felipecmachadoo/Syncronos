@@ -43,24 +43,6 @@ function configurarServicos() {
       document.body.style.overflow = "";
     }
 
-    function salvarFormulario(e) {
-      e.preventDefault();
-      if (formServico.checkValidity()) {
-        const servico = {
-          nome: document.getElementById("nome").value,
-          preco: document.getElementById("preco").value,
-          duracao: document.getElementById("duration-input").value,
-          descricao: document.getElementById("descricao").value,
-        };
-        console.log("Serviço salvo:", servico);
-        formServico.reset();
-        fecharOffcanvas();
-        notyf.success("Serviço adicionado com sucesso!");
-      } else {
-        formServico.reportValidity();
-      }
-    }
-
     // Remove eventos antigos
     btnAdicionar.onclick = null;
     offcanvasOverlay.onclick = null;
@@ -71,7 +53,6 @@ function configurarServicos() {
     btnAdicionar.onclick = abrirOffcanvas;
     offcanvasOverlay.onclick = fecharOffcanvas;
     btnCancelar.onclick = fecharOffcanvas;
-    btnSalvar.onclick = salvarFormulario;
   }
 
   // Configura o dropdown
