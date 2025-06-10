@@ -100,7 +100,8 @@
   </aside>
 
   <div class="home-content">
-    <form id="horario-form">
+    <form id="horario-form" method="POST" action="../../public/HorarioRoutes.php">
+      <input type="hidden" name="rota" value="salvarHorario" />
       <h1 class="titulo-horario">Horários de Funcionamento</h1>
       <div class="grid-container">
         <!-- Coluna 1: Dias de Atendimento -->
@@ -667,7 +668,7 @@
 
       <!-- Botão de Salvar -->
       <div class="button-container">
-        <button type="button" id="save-button" class="save-button">
+        <button type="submit" id="save-button" class="save-button">
           Salvar Horários
         </button>
       </div>

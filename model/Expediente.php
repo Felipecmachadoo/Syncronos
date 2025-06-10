@@ -1,25 +1,51 @@
 <?php
-require_once './config/conexao.php';
+
+require_once __DIR__ . '/../config/conexao.php';
+require_once '../../controller/ProfissionalController.php';
 
 class Expediente
 {
-  private $conn;
+  public function __construct(
 
-  public function __construct()
+    private int $idProfissional,
+    private string $nome,
+    private string $especialidade,
+    private string $celular,
+  ) {}
+
+
+  public function getIdProfissional(): int
   {
-    $this->conn = Conexao::conectar();
+    return $this->idProfissional;
   }
 
-  public function cadastrar($profissionalId, $diaSemana, $horaInicio, $horaFim)
+  public function getNome(): string
   {
-    $sql = "INSERT INTO Expediente (ProfissionalID, DiaSemana, HoraInicio, HoraFim) VALUES (?, ?, ?, ?)";
-    $stmt = $this->conn->prepare($sql);
-    return $stmt->execute([$profissionalId, $diaSemana, $horaInicio, $horaFim]);
+    return $this->nome;
   }
 
-  public function listar()
+  public function getEspecialidade(): string
   {
-    $sql = "SELECT * FROM Expediente";
-    return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    return $this->especialidade;
+  }
+
+  public function getCelular(): string
+  {
+    return $this->celular;
+  }
+
+  public function setNome(string $nome): void
+  {
+    $this->nome = $nome;
+  }
+
+  public function setEspecialidade(string $especialidade): void
+  {
+    $this->especialidade = $especialidade;
+  }
+
+  public function setCelular(string $celular): void
+  {
+    $this->celular = $celular;
   }
 }

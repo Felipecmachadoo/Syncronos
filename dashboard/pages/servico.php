@@ -117,7 +117,7 @@ $controller = new ServicoController();
         </p>
       </div>
       <div class="offcanvas-body">
-        <form id="formServico" method="POST" action="../../public/index.php">
+        <form id="formServico" method="POST" action="../../public/ServicoRoutes.php">
           <input type="hidden" name="rota" value="salvarServico" />
           <div class="form-group">
             <label for="nome" class="form-label">Nome do Serviço</label>

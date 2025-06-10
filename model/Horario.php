@@ -1,25 +1,49 @@
 <?php
-require_once './config/conexao.php';
+
+require_once __DIR__ . '/../config/conexao.php';
+require_once '../controller/HorarioController.php';
 
 class Horario
 {
-  private $conn;
+  public function __construct(
+    private int $idHorario,
+    private string $horaInicio,
+    private string $horaFim,
+    private string $diaSemana
+  ) {}
 
-  public function __construct()
+  public function getIdHorario(): int
   {
-    $this->conn = Conexao::conectar();
+    return $this->idHorario;
   }
 
-  public function cadastrar($diaSemana, $horaAbertura, $horaFechamento)
+  public function getHoraInicio(): string
   {
-    $sql = "INSERT INTO Horarios (DiaSemana, HoraAbertura, HoraFechamento) VALUES (?, ?, ?)";
-    $stmt = $this->conn->prepare($sql);
-    return $stmt->execute([$diaSemana, $horaAbertura, $horaFechamento]);
+    return $this->horaInicio;
   }
 
-  public function listar()
+  public function getHoraFim(): string
   {
-    $sql = "SELECT * FROM Horarios";
-    return $this->conn->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    return $this->horaFim;
+  }
+
+  public function getDiaSemana(): string
+  {
+    return $this->diaSemana;
+  }
+
+  public function setHoraInicio(string $horaInicio): void
+  {
+    $this->horaInicio = $horaInicio;
+  }
+
+  public function setHoraFim(string $horaFim): void
+  {
+    $this->horaFim = $horaFim;
+  }
+
+  public function setDiaSemana(string $diaSemana): void
+  {
+    $this->diaSemana = $diaSemana;
   }
 }
