@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Chamar o arquivo PHP para recuperar os eventos
     events: {
-      url: "../../app/calendario/listar_evento.php",
+      url: "../app/calendario/listar_evento.php",
       method: "POST",
       success: function (response) {
         return response.map(function (evento) {

@@ -7,14 +7,14 @@
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-  <link rel="stylesheet" href="../../assets/css/sidebar.css">
+  <link rel="stylesheet" href="../assets/css/sidebar.css">
   <title>Dashboard - Syncronos</title>
 </head>
 
 <body>
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="../../assets/images/Syncronos-branco.png" alt="Logo-Syncronos" />
+      <img src="../assets/images/Syncronos-branco.png" alt="Logo-Syncronos" />
       <h2>Syncronos</h2>
     </div>
     <ul class="sidebar-links">
@@ -24,14 +24,14 @@
       </h4>
 
       <li>
-        <a href="./dashboard.php">
+        <a href="dashboard.php">
           <span class="material-symbols-outlined"> dashboard </span>
           Dashboard
         </a>
       </li>
 
       <li>
-        <a href="./calendario.php">
+        <a href="calendario.php">
           <span class="material-symbols-outlined">calendar_month</span>
           Calendário
         </a>
@@ -43,20 +43,20 @@
       </h4>
 
       <li>
-        <a href="./horario.php">
+        <a href="horario.php">
           <span class="material-symbols-outlined">search_activity</span>
           Horários
         </a>
       </li>
 
       <li>
-        <a href="./servico.php">
+        <a href="servico.php">
           <span class="material-symbols-outlined">build</span> Serviços
         </a>
       </li>
 
       <li>
-        <a href="./profissional.php">
+        <a href="profissional.php">
           <span class="material-symbols-outlined">person_add</span>
           Profissionais
         </a>
@@ -88,7 +88,7 @@
     </ul>
     <div class="user-account">
       <div class="user-profile">
-        <img src="../../assets/images/logo300.png" alt="Foto-de-perfil" />
+        <img src="../assets/images/logo300.png" alt="Foto-de-perfil" />
         <div class="user-detail">
           <h3>Dark Prete's</h3>
           <span>Administrador</span>

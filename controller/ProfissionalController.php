@@ -27,7 +27,7 @@ class ServicoController
       $stmtServico = $this->conexao->prepare("INSERT INTO profissional (nome, especialidade, celular) VALUES (?, ?, ?, )");
       $stmtServico->execute([$nome, $especialidade, $celular]);
 
-      header("Location: ../dashboard/pages/profissional.php");
+      header("Location: ../pages/profissional.php");
       exit;
     } catch (PDOException $e) {
       echo "Erro ao cadastrar serviço: " . $e->getMessage();

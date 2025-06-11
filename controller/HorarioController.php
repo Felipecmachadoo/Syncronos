@@ -61,7 +61,7 @@ class HorarioController
       }
 
       $_SESSION['sucesso'] = 'Horários atualizados com sucesso!';
-      header("Location: ../dashboard/pages/horario.php");
+      header("Location: ../pages/horario.php");
       exit;
     } catch (PDOException $e) {
       $_SESSION['erro'] = 'Erro ao salvar horários: ' . $e->getMessage();
@@ -132,5 +132,24 @@ class HorarioController
     $fim = DateTime::createFromFormat('H:i', $horaFim);
 
     return $fim > $inicio;
+  }
+
+  public function buscarHorarios(): array
+  {
+    $stmt = $this->conexao->prepare("SELECT diaSemana, horaInicio, horaFim FROM horarios");
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    $horarios = [];
+    foreach ($result as $row) {
+      $dia = $row['diaSemana'];
+      $horarios[$dia] = [
+        'abertura' => $row['horaInicio'],
+        'fechamento' => $row['horaFim']
+      ];
+    }
+
+    return $horarios;
   }
 }
