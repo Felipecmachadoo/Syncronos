@@ -30,17 +30,21 @@ $cores_status = [
 $cor = isset($cores_status[$dados['cad_status']]) ? $cores_status[$dados['cad_status']] : '#3a8d60';
 
 try {
+    // Instanciar a classe de conexão
+    $conexao = new Conexao();
+    $conn = $conexao->conectar();
+
     // Criar a QUERY cadastrar evento no banco de dados
-    $query_cad_event = "INSERT INTO events (title, color, start, end, status) VALUES (:title, :color, :start, :end, :status)";
+    $query_cad_event = "INSERT INTO agendamentos (titulo, cor, dataInicio, dataFim, status) VALUES (:titulo, :cor, :dataInicio, :dataFim, :status)";
 
     // Prepara a QUERY
     $cad_event = $conn->prepare($query_cad_event);
 
     // Substituir o link pelo valor
-    $cad_event->bindParam(':title', $dados['cad_title'], PDO::PARAM_STR);
-    $cad_event->bindParam(':color', $cor, PDO::PARAM_STR);
-    $cad_event->bindParam(':start', $dados['cad_start'], PDO::PARAM_STR);
-    $cad_event->bindParam(':end', $dados['cad_end'], PDO::PARAM_STR);
+    $cad_event->bindParam(':titulo', $dados['cad_title'], PDO::PARAM_STR);
+    $cad_event->bindParam(':cor', $cor, PDO::PARAM_STR);
+    $cad_event->bindParam(':dataInicio', $dados['cad_start'], PDO::PARAM_STR);
+    $cad_event->bindParam(':dataFim', $dados['cad_end'], PDO::PARAM_STR);
     $cad_event->bindParam(':status', $dados['cad_status'], PDO::PARAM_STR);
 
     // Verificar se consegui cadastrar corretamente
@@ -48,11 +52,11 @@ try {
         $retorna = [
             'status' => true,
             'msg' => 'Evento cadastrado com sucesso!',
-            'id' => $conn->lastInsertId(),
-            'title' => $dados['cad_title'],
-            'color' => $cor,
-            'start' => $dados['cad_start'],
-            'end' => $dados['cad_end'],
+            'idAgendamento' => $conn->lastInsertId(),
+            'titulo' => $dados['cad_title'],
+            'cor' => $cor,
+            'dataInicio' => $dados['cad_start'],
+            'dataFim' => $dados['cad_end'],
             'extendedProps' => [
                 'status' => $dados['cad_status']
             ]

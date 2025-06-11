@@ -172,6 +172,5 @@ body {
   margin-left: 85px;
   position: relative;
   max-height: 100vh;
-  overflow: auto;
   transition: margin-left 0.4s ease;
 }

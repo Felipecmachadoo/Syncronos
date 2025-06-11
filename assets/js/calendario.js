@@ -39,7 +39,24 @@ document.addEventListener("DOMContentLoaded", function () {
     dayMaxEvents: true,
 
     // Chamar o arquivo PHP para recuperar os eventos
-    events: "../../app/calendario/listar_evento.php",
+    events: {
+      url: "../../app/calendario/listar_evento.php",
+      method: "POST",
+      success: function (response) {
+        return response.map(function (evento) {
+          return {
+            id: evento.idAgendamento,
+            title: evento.titulo, // Mapeia titulo → title
+            start: evento.dataInicio, // Mapeia dataInicio → start
+            end: evento.dataFim, // Mapeia dataFim → end
+            color: evento.cor, // Mapeia cor → color
+            extendedProps: {
+              status: evento.extendedProps.status,
+            },
+          };
+        });
+      },
+    },
 
     // Identificar o clique do usuário sobre o evento
     eventClick: function (info) {
@@ -180,75 +197,54 @@ document.addEventListener("DOMContentLoaded", function () {
   // Receber o SELETOR do formulário cadastrar evento
   const formCadEvento = document.getElementById("eventoForm");
 
-  // Receber o SELETOR da mensagem genérica
-  const msg = document.getElementById("msg");
-
   // Receber o SELETOR da mensagem cadastrar evento
   const msgCadEvento = document.getElementById("msgCadEvento");
 
   // Receber o SELETOR do botão da janela modal cadastrar evento
   const btnCadEvento = document.getElementById("btnCadEvento");
 
-  // Somente acessa o IF quando existir o SELETOR "formCadEvento"
   if (formCadEvento) {
-    // Aguardar o usuario clicar no botao cadastrar
     formCadEvento.addEventListener("submit", async (e) => {
-      // Não permitir a atualização da pagina
       e.preventDefault();
-
-      // Apresentar no botão o texto salvando
       btnCadEvento.textContent = "Salvando...";
 
-      // Receber os dados do formulário
-      const dadosForm = new FormData(formCadEvento);
+      try {
+        const dadosForm = new FormData(formCadEvento);
+        const response = await fetch(
+          "../../app/calendario/cadastrar_evento.php",
+          {
+            method: "POST",
+            body: dadosForm,
+          }
+        );
 
-      // Chamar o arquivo PHP responsável em salvar o evento
-      const dados = await fetch("../../app/calendario/cadastrar_evento.php", {
-        method: "POST",
-        body: dadosForm,
-      });
+        const resposta = await response.json();
 
-      // Realizar a leitura dos dados retornados pelo PHP
-      const resposta = await dados.json();
+        if (!resposta.status) {
+          notyf.error(resposta.msg);
+        } else {
+          notyf.success(resposta.msg);
+          msgCadEvento.innerHTML = "";
+          formCadEvento.reset();
 
-      // Acessa o IF quando não cadastrar com sucesso
-      if (!resposta["status"]) {
-        // Enviar a mensagem para o HTML
-        notyf.error(resposta["msg"]);
-      } else {
-        // Enviar a mensagem para o HTML
-        notyf.success(resposta["msg"]);
+          calendar.addEvent({
+            id: resposta.idAgendamento,
+            title: resposta.titulo,
+            color: resposta.cor,
+            start: resposta.dataInicio,
+            end: resposta.dataFim,
+            extendedProps: {
+              status: resposta.extendedProps?.status || "confirmado",
+            },
+          });
 
-        // Enviar a mensagem para o HTML
-        msgCadEvento.innerHTML = "";
-
-        // Limpar o formulário
-        formCadEvento.reset();
-
-        // Criar o objeto com os dados do evento
-        const novoEvento = {
-          id: resposta["id"],
-          title: resposta["title"],
-          color: resposta["color"],
-          start: resposta["start"],
-          end: resposta["end"],
-          extendedProps: {
-            status: resposta["status"] || "confirmado",
-          },
-        };
-
-        // Adicionar o evento ao calendário
-        calendar.addEvent(novoEvento);
-
-        // Chamar a função para remover a mensagem após 3 segundo
-        removerMsg();
-
-        // Fechar a janela modal
-        closeModal(formularioModal);
+          closeModal(formularioModal);
+        }
+      } catch (error) {
+        notyf.error("Ocorreu um erro ao cadastrar o evento");
+      } finally {
+        btnCadEvento.textContent = "Salvar";
       }
-
-      // Apresentar no botão o texto Cadastrar
-      btnCadEvento.textContent = "Salvar";
     });
   }
 
@@ -302,68 +298,51 @@ document.addEventListener("DOMContentLoaded", function () {
   // Receber o SELETOR do botão editar evento
   const btnEditEvento = document.getElementById("btnEditEvento");
 
-  // Somente acessa o IF quando existir o SELETOR "formEditEvento"
   if (formEditEvento) {
-    // Aguardar o usuario clicar no botao editar
     formEditEvento.addEventListener("submit", async (e) => {
-      // Não permitir a atualização da pagina
       e.preventDefault();
-
-      // Apresentar no botão o texto salvando
       btnEditEvento.textContent = "Salvando...";
 
-      // Receber os dados do formulário
-      const dadosForm = new FormData(formEditEvento);
+      try {
+        const dadosForm = new FormData(formEditEvento);
+        const response = await fetch("../../app/calendario/editar_evento.php", {
+          method: "POST",
+          body: dadosForm,
+        });
 
-      // Chamar o arquivo PHP responsável em editar o evento
-      const dados = await fetch("../../app/calendario/editar_evento.php", {
-        method: "POST",
-        body: dadosForm,
-      });
+        const resposta = await response.json();
 
-      // Realizar a leitura dos dados retornados pelo PHP
-      const resposta = await dados.json();
+        if (!resposta.status) {
+          notyf.error(resposta.msg);
+        } else {
+          notyf.success(resposta.msg);
+          msgEditEvento.innerHTML = "";
+          formEditEvento.reset();
 
-      // Acessa o IF quando não editar com sucesso
-      if (!resposta["status"]) {
-        // Enviar a mensagem para o HTML
-        notyf.error(resposta["msg"]);
-      } else {
-        // Enviar a mensagem para o HTML
-        notyf.success(resposta["msg"]);
+          // Recuperar e atualizar o evento
+          const eventoExiste = calendar.getEventById(resposta.idAgendamento); // Alterado para idAgendamento
 
-        // Enviar a mensagem para o HTML
-        msgEditEvento.innerHTML = "";
+          if (eventoExiste) {
+            eventoExiste.setProp("title", resposta.titulo); // Alterado para titulo
+            eventoExiste.setProp("color", resposta.cor); // Alterado para cor
+            eventoExiste.setStart(resposta.dataInicio); // Alterado para dataInicio
+            eventoExiste.setEnd(resposta.dataFim); // Alterado para dataFim
 
-        // Limpar o formulário
-        formEditEvento.reset();
-
-        // Recuperar o evento no FullCalendar pelo id
-        const eventoExiste = calendar.getEventById(resposta["id"]);
-
-        // Verificar se encontrou o evento no FullCalendar pelo id
-        if (eventoExiste) {
-          // Atualizar os atributos do evento com os novos valores do banco de dados
-          eventoExiste.setProp("title", resposta["title"]);
-          eventoExiste.setProp("color", resposta["color"]);
-          eventoExiste.setStart(resposta["start"]);
-          eventoExiste.setEnd(resposta["end"]);
-
-          // Atualizar o status se existir
-          if (resposta["status"]) {
-            eventoExiste.setExtendedProp("status", resposta["status"]);
+            if (resposta.extendedProps?.status) {
+              eventoExiste.setExtendedProp(
+                "status",
+                resposta.extendedProps.status
+              );
+            }
           }
+
+          closeModal(visualizarModal);
         }
-
-        // Chamar a função para remover a mensagem após 3 segundo
-        removerMsg();
-
-        // Fechar a janela modal
-        closeModal(visualizarModal);
+      } catch (error) {
+        notyf.error("Ocorreu um erro ao editar o evento");
+      } finally {
+        btnEditEvento.textContent = "Salvar";
       }
-
-      // Apresentar no botão o texto salvar
-      btnEditEvento.textContent = "Salvar";
     });
   }
 
@@ -386,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Chamar o arquivo PHP responsável apagar o evento
         const dados = await fetch(
-          "../../app/calendario/apagar_evento.php?id=" + idEvento
+          "../../app/calendario/apagar_evento.php?idAgendamento=" + idEvento
         );
 
         // Realizar a leitura dos dados retornados pelo PHP
