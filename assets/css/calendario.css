@@ -520,6 +520,10 @@ body {
   transform: rotate(180deg);
 }
 
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 /* Responsividade para o modal customizado */
 @media (max-width: 768px) {
   .custom-modal-content {

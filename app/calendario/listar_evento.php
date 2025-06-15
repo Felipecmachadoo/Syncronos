@@ -23,10 +23,10 @@ try {
     while ($row_events = $result_events->fetch(PDO::FETCH_ASSOC)) {
         $eventos[] = [
             'idAgendamento' => $row_events['idAgendamento'],
-            'titulo' => $row_events['titulo'], // Corrigido para usar 'title' em vez de 'titulo'
-            'cor' => $row_events['cor'],  // Corrigido para usar 'color' em vez de 'cor'
-            'dataInicio' => $row_events['dataInicio'],  // Corrigido para usar 'start' em vez de 'dataInicio'
-            'dataFim' => $row_events['dataFim'],      // Corrigido para usar 'end' em vez de 'dataFim'
+            'titulo' => $row_events['titulo'],
+            'cor' => $row_events['cor'],
+            'dataInicio' => $row_events['dataInicio'],
+            'dataFim' => $row_events['dataFim'],
             'extendedProps' => [
                 'status' => $row_events['status']
             ]
@@ -35,8 +35,6 @@ try {
 } catch (PDOException $e) {
     // Em caso de erro, retornar array vazio
     $eventos = [];
-    // Você pode querer logar o erro para debug:
-    // error_log("Erro ao buscar eventos: " . $e->getMessage());
 }
 
 // Converter o array em objeto e retornar para o JavaScript

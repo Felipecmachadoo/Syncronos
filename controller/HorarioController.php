@@ -19,48 +19,64 @@ class HorarioController
       session_start();
     }
 
-    if (!isset($_POST['dias']) || !is_array($_POST['dias'])) {
-      $_SESSION['erro'] = 'Selecione pelo menos um dia de funcionamento.';
-      header("Location: " . $_SERVER['HTTP_REFERER']);
-      exit;
-    }
-
     try {
-      foreach ($_POST['dias'] as $dia) {
-        $nomeAbertura = 'abertura_' . $dia;
-        $nomeFechamento = 'fechamento_' . $dia;
+      // Primeiro processa os dias desmarcados (se houver)
+      if (!empty($_POST['diasDesmarcados'])) {
+        $diasDesmarcados = json_decode($_POST['diasDesmarcados'], true);
 
-        $horaInicio = $_POST[$nomeAbertura] ?? null;
-        $horaFim = $_POST[$nomeFechamento] ?? null;
-
-        if (empty($horaInicio) || empty($horaFim)) {
-          $_SESSION['erro'] = "Preencha os horários de abertura e fechamento para {$dia}.";
-          header("Location: " . $_SERVER['HTTP_REFERER']);
-          exit;
-        }
-
-        if (!$this->validarHorarios($horaInicio, $horaFim)) {
-          $_SESSION['erro'] = "O horário de fechamento deve ser posterior ao de abertura para {$dia}.";
-          header("Location: " . $_SERVER['HTTP_REFERER']);
-          exit;
-        }
-
-        $horario = new Horario(
-          idHorario: 0,
-          horaInicio: $horaInicio,
-          horaFim: $horaFim,
-          diaSemana: $dia
-        );
-
-        // Verifica se já existe horário para este dia
-        if ($this->horarioExiste($dia)) {
-          $this->atualizar($horario);
-        } else {
-          $this->inserir($horario);
+        foreach ($diasDesmarcados as $dia) {
+          $this->removerHorario($dia);
         }
       }
 
-      $_SESSION['sucesso'] = 'Horários atualizados com sucesso!';
+      // Depois processa os dias marcados (se houver)
+      if (isset($_POST['dias']) && is_array($_POST['dias'])) {
+        foreach ($_POST['dias'] as $dia) {
+          $nomeAbertura = 'abertura_' . $dia;
+          $nomeFechamento = 'fechamento_' . $dia;
+
+          $horaInicio = $_POST[$nomeAbertura] ?? null;
+          $horaFim = $_POST[$nomeFechamento] ?? null;
+
+          if (empty($horaInicio) || empty($horaFim)) {
+            $_SESSION['erro'] = "Preencha os horários de abertura e fechamento para {$dia}.";
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit;
+          }
+
+          if (!$this->validarHorarios($horaInicio, $horaFim)) {
+            $_SESSION['erro'] = "O horário de fechamento deve ser posterior ao de abertura para {$dia}.";
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit;
+          }
+
+          $horario = new Horario(
+            idHorario: 0,
+            horaInicio: $horaInicio,
+            horaFim: $horaFim,
+            diaSemana: $dia
+          );
+
+          // Verifica se já existe horário para este dia
+          if ($this->horarioExiste($dia)) {
+            $this->atualizar($horario);
+          } else {
+            $this->inserir($horario);
+          }
+        }
+
+        $_SESSION['sucesso'] = 'Horários atualizados com sucesso!';
+      } else {
+        // Caso não haja dias marcados, mas há dias desmarcados
+        if (!empty($diasDesmarcados)) {
+          $_SESSION['sucesso'] = 'Dias desmarcados removidos com sucesso!';
+        } else {
+          $_SESSION['erro'] = 'Selecione pelo menos um dia de funcionamento.';
+          header("Location: " . $_SERVER['HTTP_REFERER']);
+          exit;
+        }
+      }
+
       header("Location: ../pages/horario.php");
       exit;
     } catch (PDOException $e) {
@@ -151,5 +167,15 @@ class HorarioController
     }
 
     return $horarios;
+  }
+
+  private function removerHorario(string $diaSemana): void
+  {
+    $stmt = $this->conexao->prepare(
+      "DELETE FROM horarios WHERE diaSemana = :diaSemana"
+    );
+    $stmt->bindParam(':diaSemana', $diaSemana);
+    $stmt->execute();
+    $stmt->closeCursor();
   }
 }

@@ -210,13 +210,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const dadosForm = new FormData(formCadEvento);
-        const response = await fetch(
-          "../../app/calendario/cadastrar_evento.php",
-          {
-            method: "POST",
-            body: dadosForm,
-          }
-        );
+        const response = await fetch("../app/calendario/cadastrar_evento.php", {
+          method: "POST",
+          body: dadosForm,
+        });
 
         const resposta = await response.json();
 
@@ -305,7 +302,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const dadosForm = new FormData(formEditEvento);
-        const response = await fetch("../../app/calendario/editar_evento.php", {
+        const response = await fetch("../app/calendario/editar_evento.php", {
           method: "POST",
           body: dadosForm,
         });
@@ -365,7 +362,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Chamar o arquivo PHP responsável apagar o evento
         const dados = await fetch(
-          "../../app/calendario/apagar_evento.php?idAgendamento=" + idEvento
+          "../app/calendario/apagar_evento.php?idAgendamento=" + idEvento
         );
 
         // Realizar a leitura dos dados retornados pelo PHP

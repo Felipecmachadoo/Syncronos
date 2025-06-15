@@ -17,38 +17,36 @@ body {
   color: var(--cor-white);
 }
 
-/* Botão para abrir o offcanvas */
 .profissional-button-container {
   display: flex;
-  justify-content: center;
-  margin: 50px 0;
+  justify-content: flex-end;
+  margin: 20px 0 10px 0;
+  padding: 0 15px;
 }
 
 .profissional-open-button {
+  padding: 10px 20px;
+  background-color: var(--cor-gold);
+  color: var(--cor-form);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: var(--cor-gold);
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  gap: 8px;
 }
 
 .profissional-open-button:hover {
   background-color: #e6c200;
   transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.profissional-open-button .material-symbols-outlined {
-  margin-right: 8px;
-  font-size: 20px;
+.profissional-open-button:active {
+  transform: translateY(0);
 }
 
 /* Overlay */
@@ -591,4 +589,94 @@ input::placeholder {
     padding: 6px 12px;
     font-size: 14px;
   }
+}
+.profissional-lista-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 15px;
+  background-color: var(--cor-background);
+  border-radius: 8px;
+}
+
+.profissional-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--cor-white);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profissional-tabela thead {
+  background-color: var(--cor-form);
+  border-bottom: 2px solid var(--cor-gold);
+}
+
+.profissional-tabela th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--cor-gold);
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
+}
+
+.profissional-tabela tbody tr {
+  border-bottom: 1px solid var(--cor-border);
+  transition: background-color 0.3s ease;
+}
+
+.profissional-tabela tbody tr:nth-child(even) {
+  background-color: var(--cor-form);
+}
+
+.profissional-tabela tbody tr:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.profissional-tabela td {
+  padding: 12px 15px;
+  color: var(--cor-white);
+}
+
+.profissional-tabela td:last-child {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-editar,
+.btn-excluir {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 0.85em;
+}
+
+.btn-editar {
+  background-color: var(--cor-gold);
+  color: var(--cor-form);
+}
+
+.btn-editar:hover {
+  background-color: #e6c200;
+  transform: translateY(-1px);
+}
+
+.btn-excluir {
+  background-color: var(--cor-red);
+  color: var(--cor-white);
+}
+
+.btn-excluir:hover {
+  background-color: #c0392b;
+  transform: translateY(-1px);
+}
+
+/* Estilo para quando não há dados */
+.profissional-tabela tbody tr td[colspan] {
+  text-align: center;
+  padding: 20px;
+  color: var(--cor-input-text);
 }

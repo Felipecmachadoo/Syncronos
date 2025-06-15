@@ -174,7 +174,7 @@ $controller = new ServicoController();
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-  <script src="../../assets/js/servico.js"></script>
+  <script src="../assets/js/servico.js"></script>
 </body>
 
 </html>

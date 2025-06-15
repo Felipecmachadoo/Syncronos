@@ -1,20 +1,19 @@
 <?php
 
 require_once __DIR__ . '/../config/conexao.php';
-require_once '../../controller/ProfissionalController.php';
+require_once '../controller/ProfissionalController.php';
 
 class Profissional
 {
   public function __construct(
-
-    private int $idProfissional,
+    private ?int $idProfissional,
     private string $nome,
     private string $especialidade,
-    private string $celular,
+    private string $celular
   ) {}
 
-
-  public function getIdProfissional(): int
+  // Getters
+  public function getIdProfissional(): ?int
   {
     return $this->idProfissional;
   }
@@ -32,6 +31,12 @@ class Profissional
   public function getCelular(): string
   {
     return $this->celular;
+  }
+
+  // Setters
+  public function setIdProfissional(int $idProfissional): void
+  {
+    $this->idProfissional = $idProfissional;
   }
 
   public function setNome(string $nome): void

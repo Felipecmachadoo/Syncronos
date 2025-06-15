@@ -97,6 +97,144 @@ function configurarHorarios() {
     }
   }
 
+  // Função para obter os dias que foram desmarcados
+  function getDiasDesmarcados() {
+    // Obter dados salvos anteriormente
+    const dadosSalvos = localStorage.getItem("horariosFuncionamento");
+    if (!dadosSalvos) return [];
+
+    const dadosAnteriores = JSON.parse(dadosSalvos);
+    const diasAnteriores = dadosAnteriores.dias || [];
+
+    // Obter dias atualmente selecionados
+    const diasAtuais = [];
+    document
+      .querySelectorAll('input[name="dias[]"]:checked')
+      .forEach((checkbox) => {
+        diasAtuais.push(checkbox.value);
+      });
+
+    // Encontrar dias que estavam selecionados antes mas não estão mais
+    return diasAnteriores.filter((dia) => !diasAtuais.includes(dia));
+  }
+
+  // Função para coletar os dados do formulário
+  function coletarDadosFormulario() {
+    const dados = {
+      dias: [],
+      horarios: {},
+    };
+
+    // Coletar dias selecionados
+    document
+      .querySelectorAll('input[name="dias[]"]:checked')
+      .forEach((checkbox) => {
+        dados.dias.push(checkbox.value);
+      });
+
+    // Coletar horários para todos os dias (independente de estarem selecionados)
+    const diasSemana = [
+      "segunda",
+      "terca",
+      "quarta",
+      "quinta",
+      "sexta",
+      "sabado",
+      "domingo",
+    ];
+
+    diasSemana.forEach((dia) => {
+      const aberturaInput = document.querySelector(
+        `input[name="abertura_${dia}"]`
+      );
+      const fechamentoInput = document.querySelector(
+        `input[name="fechamento_${dia}"]`
+      );
+
+      if (aberturaInput && fechamentoInput) {
+        dados.horarios[dia] = {
+          abertura: aberturaInput.value || "",
+          fechamento: fechamentoInput.value || "",
+        };
+      }
+    });
+
+    return dados;
+  }
+
+  // Função para validar os dados do formulário
+  function validarFormulario(dados) {
+    // Verificar se há dias desmarcados
+    const diasDesmarcados = getDiasDesmarcados();
+
+    // Se não há dias selecionados, mas há dias desmarcados, permitir o salvamento
+    // (isso significa que o usuário está removendo dias)
+    if (dados.dias.length === 0 && diasDesmarcados.length > 0) {
+      return true;
+    }
+
+    // Se não há dias selecionados e não há dias desmarcados, exigir pelo menos um dia
+    if (dados.dias.length === 0) {
+      mostrarFeedback("Selecione pelo menos um dia de funcionamento.", "error");
+      return false;
+    }
+
+    // Verificar se os dias selecionados têm horários preenchidos
+    let horariosValidos = true;
+
+    for (let i = 0; i < dados.dias.length; i++) {
+      const dia = dados.dias[i];
+      const horarios = dados.horarios[dia];
+
+      // Verificar se o dia tem horários definidos
+      if (!horarios || !horarios.abertura || !horarios.fechamento) {
+        horariosValidos = false;
+        mostrarFeedback(
+          `Preencha os horários de abertura e fechamento para ${getDiaNome(
+            dia
+          )}.`,
+          "error"
+        );
+        return false;
+      }
+
+      // Verificar se o horário de fechamento é posterior ao de abertura
+      try {
+        const abertura = horarios.abertura.replace("h", "").split(":");
+        const fechamento = horarios.fechamento.replace("h", "").split(":");
+
+        const aberturaHora = parseInt(abertura[0]);
+        const aberturaMinuto = parseInt(abertura[1]);
+        const fechamentoHora = parseInt(fechamento[0]);
+        const fechamentoMinuto = parseInt(fechamento[1]);
+
+        if (
+          fechamentoHora < aberturaHora ||
+          (fechamentoHora === aberturaHora &&
+            fechamentoMinuto <= aberturaMinuto)
+        ) {
+          horariosValidos = false;
+          mostrarFeedback(
+            `O horário de fechamento deve ser posterior ao de abertura para ${getDiaNome(
+              dia
+            )}.`,
+            "error"
+          );
+          return false;
+        }
+      } catch (error) {
+        horariosValidos = false;
+        mostrarFeedback(
+          `Formato de horário inválido para ${getDiaNome(dia)}.`,
+          "error"
+        );
+        return false;
+      }
+    }
+
+    return horariosValidos;
+  }
+
   // Função auxiliar para obter o nome do dia formatado
   function getDiaNome(dia) {
     const nomes = {
@@ -132,6 +270,128 @@ function configurarHorarios() {
         message: mensagem,
       });
     }
+  }
+
+  // Função para salvar os dados (exemplo com localStorage)
+  function salvarDados(dados) {
+    try {
+      // Verificar se há dias desmarcados
+      const diasDesmarcados = getDiasDesmarcados();
+
+      // Se todos os dias foram desmarcados, limpar completamente os dados
+      if (dados.dias.length === 0 && diasDesmarcados.length > 0) {
+        localStorage.setItem(
+          "horariosFuncionamento",
+          JSON.stringify({
+            dias: [],
+            horarios: {},
+          })
+        );
+
+        mostrarFeedback(
+          "Todos os dias de funcionamento foram removidos.",
+          "success"
+        );
+        return true;
+      }
+
+      // Obter dados salvos anteriormente para manter os horários dos dias não alterados
+      const dadosSalvos = localStorage.getItem("horariosFuncionamento");
+      let dadosAtualizados = dados;
+
+      if (dadosSalvos) {
+        const dadosAnteriores = JSON.parse(dadosSalvos);
+
+        // Manter os horários dos dias que não foram alterados
+        Object.keys(dadosAnteriores.horarios || {}).forEach((dia) => {
+          if (!dados.dias.includes(dia) && !diasDesmarcados.includes(dia)) {
+            // Se o dia não está nos dias selecionados atuais e não foi desmarcado,
+            // manter os horários anteriores
+            dadosAtualizados.horarios[dia] = dadosAnteriores.horarios[dia];
+          }
+        });
+      }
+
+      // Salvar no localStorage
+      localStorage.setItem(
+        "horariosFuncionamento",
+        JSON.stringify(dadosAtualizados)
+      );
+
+      // Mostrar mensagem de sucesso
+      if (diasDesmarcados.length > 0) {
+        mostrarFeedback(
+          `Horários salvos com sucesso! ${diasDesmarcados.length} dia(s) removido(s).`,
+          "success"
+        );
+      } else {
+        mostrarFeedback("Horários salvos com sucesso!", "success");
+      }
+
+      return true;
+    } catch (error) {
+      mostrarFeedback("Erro ao salvar os horários. Tente novamente.", "error");
+      return false;
+    }
+  }
+
+  // Função para carregar dados salvos anteriormente
+  function carregarDadosSalvos() {
+    try {
+      const dadosSalvos = localStorage.getItem("horariosFuncionamento");
+
+      if (dadosSalvos) {
+        const dados = JSON.parse(dadosSalvos);
+
+        // Marcar os dias selecionados
+        dados.dias.forEach((dia) => {
+          const checkbox = document.querySelector(`input[value="${dia}"]`);
+          if (checkbox) {
+            checkbox.checked = true;
+          }
+        });
+
+        // Preencher os horários
+        Object.keys(dados.horarios).forEach((dia) => {
+          const horarios = dados.horarios[dia];
+
+          const aberturaInput = document.querySelector(
+            `input[name="abertura_${dia}"]`
+          );
+          const fechamentoInput = document.querySelector(
+            `input[name="fechamento_${dia}"]`
+          );
+
+          if (aberturaInput && horarios.abertura) {
+            aberturaInput.value = horarios.abertura;
+            aberturaInput.dataset.selected = horarios.abertura;
+          }
+
+          if (fechamentoInput && horarios.fechamento) {
+            fechamentoInput.value = horarios.fechamento;
+            fechamentoInput.dataset.selected = horarios.fechamento;
+          }
+        });
+      }
+    } catch (error) {
+      mostrarFeedback("Erro ao carregar dados salvos.", "error");
+    }
+  }
+
+  function getDiasDesmarcados() {
+    const todosDias = [
+      "segunda",
+      "terca",
+      "quarta",
+      "quinta",
+      "sexta",
+      "sabado",
+      "domingo",
+    ];
+    const diasMarcados = Array.from(
+      document.querySelectorAll('input[name="dias[]"]:checked')
+    ).map((el) => el.value);
+    return todosDias.filter((dia) => !diasMarcados.includes(dia));
   }
 
   // Configura eventos dos inputs de horário
@@ -221,6 +481,46 @@ function configurarHorarios() {
       });
     }
   });
+
+  // Configura evento ao botão de salvar
+  // Configura evento ao botão de salvar
+  const saveButton = document.getElementById("save-button");
+  if (saveButton) {
+    // Remove evento antigo
+    saveButton.onclick = null;
+
+    // Adiciona novo evento
+    saveButton.addEventListener("click", function () {
+      const dados = coletarDadosFormulario();
+      const diasDesmarcados = getDiasDesmarcados();
+
+      // Adiciona os dias desmarcados como um campo hidden no formulário
+      const form = document.querySelector("form");
+      const existingHidden = document.getElementById("diasDesmarcados");
+
+      // Remove o campo hidden existente se houver
+      if (existingHidden) {
+        form.removeChild(existingHidden);
+      }
+
+      // Adiciona um novo campo hidden com os dias desmarcados
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "diasDesmarcados";
+      hiddenInput.id = "diasDesmarcados";
+      hiddenInput.value = JSON.stringify(diasDesmarcados);
+      form.appendChild(hiddenInput);
+
+      // Verificar se há dias desmarcados antes de validar
+      if (validarFormulario(dados)) {
+        salvarDados(dados);
+        form.submit(); // Envia o formulário normalmente
+      }
+    });
+  }
+
+  // Carregar dados salvos anteriormente (se existirem)
+  carregarDadosSalvos();
 
   // Chama a função para adicionar os horários aos dropdowns
   adicionarHorarios();

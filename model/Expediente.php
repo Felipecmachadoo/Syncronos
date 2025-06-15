@@ -1,51 +1,84 @@
 <?php
 
 require_once __DIR__ . '/../config/conexao.php';
-require_once '../../controller/ProfissionalController.php';
+require_once '../controller/ExpedienteController.php';
 
 class Expediente
 {
   public function __construct(
-
+    private int $idExpediente,
     private int $idProfissional,
-    private string $nome,
-    private string $especialidade,
-    private string $celular,
+    private string $diaSemana,
+    private string $inicioExpediente,
+    private string $inicioIntervalo,
+    private string $fimIntervalo,
+    private string $fimExpediente
   ) {}
 
+  // Getters
+  public function getIdExpediente(): int
+  {
+    return $this->idExpediente;
+  }
 
   public function getIdProfissional(): int
   {
     return $this->idProfissional;
   }
 
-  public function getNome(): string
+  public function getDiaSemana(): string
   {
-    return $this->nome;
+    return $this->diaSemana;
   }
 
-  public function getEspecialidade(): string
+  public function getInicioExpediente(): string
   {
-    return $this->especialidade;
+    return $this->inicioExpediente;
   }
 
-  public function getCelular(): string
+  public function getInicioIntervalo(): string
   {
-    return $this->celular;
+    return $this->inicioIntervalo;
   }
 
-  public function setNome(string $nome): void
+  public function getFimIntervalo(): string
   {
-    $this->nome = $nome;
+    return $this->fimIntervalo;
   }
 
-  public function setEspecialidade(string $especialidade): void
+  public function getFimExpediente(): string
   {
-    $this->especialidade = $especialidade;
+    return $this->fimExpediente;
   }
 
-  public function setCelular(string $celular): void
+  // Setters
+  public function setIdProfissional(int $idProfissional): void
   {
-    $this->celular = $celular;
+    $this->idProfissional = $idProfissional;
+  }
+
+  public function setDiaSemana(string $diaSemana): void
+  {
+    $this->diaSemana = $diaSemana;
+  }
+
+  public function setInicioExpediente(string $inicioExpediente): void
+  {
+    $this->inicioExpediente = $inicioExpediente;
+  }
+
+  public function setInicioIntervalo(string $inicioIntervalo): void
+  {
+    $this->inicioIntervalo = $inicioIntervalo;
+  }
+
+  public function setFimIntervalo(string $fimIntervalo): void
+  {
+    $this->fimIntervalo = $fimIntervalo;
+  }
+
+  public function setFimExpediente(string $fimExpediente): void
+  {
+    $this->fimExpediente = $fimExpediente;
   }
 }

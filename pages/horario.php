@@ -686,7 +686,7 @@ $horariosSalvos = $controller->buscarHorarios();
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-  <script src="../../assets/js/horario.js"></script>
+  <script src="../assets/js/horario.js"></script>
 </body>
 
 </html>
