@@ -4,12 +4,8 @@ const notyf = new Notyf({
   position: { x: "right", y: "top" },
 });
 
-let profissionalConfigurado = false;
-
 // Função principal
 function configurarProfissional() {
-  if (profissionalConfigurado) return;
-
   // Elementos DOM
   const elements = {
     openOffcanvas: document.getElementById("profissional-open-offcanvas"),
@@ -378,7 +374,6 @@ function configurarProfissional() {
   // Inicialização
   applyPhoneMask();
   configurarDropdownsHorarios();
-  profissionalConfigurado = true;
 }
 
 // Funções de utilidade
@@ -453,9 +448,9 @@ function configurarDropdownsHorarios() {
     });
 }
 
-// Inicialização
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", configurarProfissional);
-} else {
-  configurarProfissional();
-}
+// Inicialização condicional
+document.addEventListener("DOMContentLoaded", function () {
+  if (document.getElementById("profissional-form")) {
+    configurarProfissional();
+  }
+});

@@ -38,4 +38,52 @@ class ServicoController
       echo "Erro ao cadastrar serviço: " . $e->getMessage();
     }
   }
+
+  public function listarServicos()
+  {
+    try {
+      $stmt = $this->conexao->prepare("SELECT * FROM servicos ORDER BY nome");
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      echo "Erro ao listar serviços: " . $e->getMessage();
+      return [];
+    }
+  }
+
+  public function buscarServicoPorId($idServico)
+  {
+    try {
+      $stmt = $this->conexao->prepare("SELECT * FROM servicos WHERE idServico = ?");
+      $stmt->execute([$idServico]);
+      $servico = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      // Garanta que está retornando os dados corretamente
+      if ($servico) {
+        header('Content-Type: application/json');
+        echo json_encode($servico);
+        exit;
+      } else {
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Serviço não encontrado']);
+        exit;
+      }
+    } catch (PDOException $e) {
+      header('Content-Type: application/json');
+      echo json_encode(['error' => 'Erro ao buscar serviço: ' . $e->getMessage()]);
+      exit;
+    }
+  }
+
+  public function excluirServico($idServico)
+  {
+    try {
+      $stmt = $this->conexao->prepare("DELETE FROM servicos WHERE idServico = ?");
+      $stmt->execute([$idServico]);
+      return true;
+    } catch (PDOException $e) {
+      echo "Erro ao excluir serviço: " . $e->getMessage();
+      return false;
+    }
+  }
 }

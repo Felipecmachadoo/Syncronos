@@ -106,7 +106,51 @@ $controller = new ServicoController();
   </aside>
 
   <div class="home-content" id="home-content">
-    <button class="btn-adicionar" id="btnAdicionar">Novo Serviço</button>
+    <div class="servico-button-container">
+      <button class="btn-adicionar" id="btnAdicionar">+ Novo Serviço</button>
+    </div>
+
+    <div class="servico-lista-container">
+      <table class="servico-tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Duração</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $servicos = $controller->listarServicos();
+          if (empty($servicos)): ?>
+            <tr>
+              <td colspan="5">Nenhum serviço cadastrado</td>
+            </tr>
+            <?php else:
+            foreach ($servicos as $servico):
+              $precoFormatado = 'R$ ' . number_format($servico['Preco'], 2, ',', '.');
+            ?>
+              <tr>
+                <td><?php echo htmlspecialchars($servico['Nome']); ?></td>
+                <td><?php echo htmlspecialchars($servico['Descricao']); ?></td>
+                <td><?php echo $precoFormatado; ?></td>
+                <td><?php echo htmlspecialchars($servico['Duracao']); ?></td>
+                <td>
+                  <button class="btn-editar" data-id="<?php echo $servico['idServico']; ?>">
+                    Editar
+                  </button>
+                  <button class="btn-excluir" data-id="<?php echo $servico['idServico']; ?>">
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+          <?php endforeach;
+          endif; ?>
+        </tbody>
+      </table>
+    </div>
 
     <div class="offcanvas-overlay" id="offcanvasOverlay"></div>
     <div class="offcanvas" id="offcanvas">

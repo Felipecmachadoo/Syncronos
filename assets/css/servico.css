@@ -14,6 +14,13 @@
   font-family: "Inter", Poppins, sans-serif;
 }
 
+.servico-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0 10px 0;
+  padding: 0 15px;
+}
+
 .btn-adicionar {
   background-color: var(--cor-gold);
   color: black;
@@ -236,4 +243,98 @@ textarea.form-control {
   .offcanvas {
     max-width: 100%;
   }
+}
+
+/* Estilos da tabela de serviços - Adaptado do profissional.css */
+.servico-lista-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 15px;
+  background-color: var(--cor-background);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.servico-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--cor-white);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.servico-tabela thead {
+  background-color: var(--cor-form);
+  border-bottom: 2px solid var(--cor-gold);
+}
+
+.servico-tabela th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--cor-gold);
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.5px;
+}
+
+.servico-tabela tbody tr {
+  border-bottom: 1px solid var(--cor-border);
+  transition: background-color 0.3s ease;
+}
+
+.servico-tabela tbody tr:nth-child(even) {
+  background-color: var(--cor-form);
+}
+
+.servico-tabela tbody tr:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+}
+
+.servico-tabela td {
+  padding: 12px 15px;
+  color: var(--cor-white);
+}
+
+.servico-tabela td:last-child {
+  display: flex;
+  gap: 10px;
+}
+
+/* Botões de ação - versão sem ícones */
+.servico-tabela .btn-editar,
+.servico-tabela .btn-excluir {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 0.85em;
+}
+
+.servico-tabela .btn-editar {
+  background-color: var(--cor-gold);
+  color: var(--cor-form);
+}
+
+.servico-tabela .btn-editar:hover {
+  background-color: #e6c200;
+  transform: translateY(-1px);
+}
+
+.servico-tabela .btn-excluir {
+  background-color: red;
+  color: var(--cor-white);
+}
+
+.servico-tabela .btn-excluir:hover {
+  background-color: #c0392b;
+  transform: translateY(-1px);
+}
+
+/* Estilo para quando não há dados */
+.servico-tabela tbody tr td[colspan] {
+  text-align: center;
+  padding: 20px;
+  color: var(--cor-input-text);
 }
