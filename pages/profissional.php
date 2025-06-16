@@ -239,6 +239,7 @@ if (isset($_SESSION['erro'])) {
           <div class="profissional-offcanvas-body">
             <form id="profissional-horario-form" method="POST" action="../public/ProfissionalRoutes.php">
               <input type="hidden" name="rota" value="salvarExpediente">
+              <input type="hidden" id="profissional-id-hidden" name="idProfissional">
               <div class="profissional-grid-container">
                 <!-- Coluna 1: Dias de Atendimento -->
                 <div class="profissional-grid-column">

@@ -1,52 +1,16 @@
-// Variável para controlar se já configuramos os eventos
-let profissionalConfigurado = false;
-
+// Configuração inicial
 const notyf = new Notyf({
   duration: 3000,
-  position: {
-    x: "right",
-    y: "top",
-  },
+  position: { x: "right", y: "top" },
 });
 
-// Função para excluir profissional
-function excluirProfissional(id) {
-  const formData = new FormData();
-  formData.append("rota", "excluirProfissional");
-  formData.append("idProfissional", id);
+let profissionalConfigurado = false;
 
-  fetch("../public/ProfissionalRoutes.php", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return response.text().then((text) => {
-          throw new Error(text);
-        });
-      }
-      return response.text();
-    })
-    .then((data) => {
-      notyf.success("Profissional excluído com sucesso!");
-      document
-        .querySelector(`.btn-excluir[data-id="${id}"]`)
-        .closest("tr")
-        .remove();
-    })
-    .catch((error) => {
-      console.error("Erro:", error);
-      notyf.error("Erro ao excluir profissional: " + error.message);
-    });
-}
-
-// Função principal para configurar tudo
+// Função principal
 function configurarProfissional() {
   if (profissionalConfigurado) return;
 
-  console.log("Configurando profissional...");
-
-  // ELEMENTOS DO DOM
+  // Elementos DOM
   const elements = {
     openOffcanvas: document.getElementById("profissional-open-offcanvas"),
     closeOffcanvas: document.getElementById("profissional-close-offcanvas"),
@@ -69,16 +33,34 @@ function configurarProfissional() {
     profissao: document.getElementById("profissional-profissao"),
   };
 
-  // FUNÇÕES DO OFFCANVAS
+  // Funções de controle
   function openOffcanvas(profissionalData = null) {
     elements.offcanvas.classList.add("active");
     elements.overlay.classList.add("active");
     document.body.style.overflow = "hidden";
     showCadastroForm();
 
+    // Limpa todos os campos do expediente
+    document
+      .querySelectorAll('input[name="profissional-dias[]"]')
+      .forEach((cb) => {
+        cb.checked = false;
+      });
+    document
+      .querySelectorAll(".profissional-horario-input")
+      .forEach((input) => {
+        input.value = "";
+      });
+
     if (profissionalData) {
       fillProfissionalData(profissionalData);
-      elements.saveButton.textContent = "Atualizar Profissional";
+    } else {
+      // Limpa também o formulário de profissional
+      elements.profissionalForm.reset();
+      // Remove qualquer ID existente
+      document
+        .querySelectorAll('input[name="idProfissional"]')
+        .forEach((el) => el.remove());
     }
   }
 
@@ -88,20 +70,6 @@ function configurarProfissional() {
     document.body.style.overflow = "";
   }
 
-  // Função para preencher os campos com os dados do profissional
-  function fillProfissionalData(profissionalData) {
-    elements.nome.value = "";
-    elements.celular.value = "";
-    elements.profissao.value = "";
-
-    if (profissionalData.nome) elements.nome.value = profissionalData.nome;
-    if (profissionalData.celular)
-      elements.celular.value = profissionalData.celular;
-    if (profissionalData.especialidade)
-      elements.profissao.value = profissionalData.especialidade;
-  }
-
-  // NAVEGAÇÃO ENTRE FORMULÁRIOS
   function showCadastroForm() {
     elements.cadastroForm.classList.add("active");
     elements.expedienteForm.classList.remove("active");
@@ -109,6 +77,7 @@ function configurarProfissional() {
     elements.navExpediente.classList.remove("active");
     document.querySelector(".profissional-offcanvas-header h2").textContent =
       "Cadastro de Profissional";
+    elements.saveButton.textContent = "Salvar Profissional";
   }
 
   function showExpedienteForm() {
@@ -118,160 +87,373 @@ function configurarProfissional() {
     elements.navExpediente.classList.add("active");
     document.querySelector(".profissional-offcanvas-header h2").textContent =
       "Expediente";
+    elements.saveButton.textContent = "Salvar Expediente";
   }
 
-  function limparFormularioProfissional() {
-    const elements = {
-      nome: document.getElementById("profissional-nome"),
-      celular: document.getElementById("profissional-celular"),
-      profissao: document.getElementById("profissional-profissao"),
-      saveButton: document.getElementById("profissional-save-all-button"),
-    };
+  // Funções de dados
+  async function saveData() {
+    const isExpedienteTab = elements.navExpediente.classList.contains("active");
 
-    // Limpa os campos
-    elements.nome.value = "";
-    elements.celular.value = "";
-    elements.profissao.value = "";
+    try {
+      elements.saveButton.disabled = true;
+      elements.saveButton.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status"></span> Salvando...';
 
-    // Remove o campo hidden do ID se existir
-    const existingIdInput = document.querySelector(
-      'input[name="idProfissional"]'
-    );
-    if (existingIdInput) {
-      existingIdInput.remove();
+      if (isExpedienteTab) {
+        await saveExpediente();
+      } else {
+        const profissionalId = await saveProfissional();
+        updateHiddenIdField(profissionalId);
+        showExpedienteForm();
+      }
+    } catch (error) {
+      handleError(error);
+      showCadastroForm();
+    } finally {
+      elements.saveButton.disabled = false;
+      elements.saveButton.textContent = isExpedienteTab
+        ? "Salvar Expediente"
+        : "Salvar Profissional";
     }
-
-    // Garante que o botão está como "Cadastrar"
-    elements.saveButton.textContent = "Cadastrar Profissional";
   }
 
-  // Modifique o event listener do botão de abrir offcanvas para novo cadastro
-  if (elements.openOffcanvas) {
-    elements.openOffcanvas.addEventListener("click", () => {
-      limparFormularioProfissional(); // Limpa o formulário antes de abrir
-      openOffcanvas(); // Abre o offcanvas
-    });
-  }
-
-  // SALVAMENTO DOS DADOS (SEM VALIDAÇÕES)
-  function saveData() {
-    // Cria um FormData com os dados do formulário principal
+  async function saveProfissional() {
     const formData = new FormData(elements.profissionalForm);
     formData.append("rota", "salvarProfissional");
 
-    // Envia os dados
-    fetch("../public/ProfissionalRoutes.php", {
+    const response = await fetch("../public/ProfissionalRoutes.php", {
       method: "POST",
       body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-        }
-        return response.text();
-      })
-      .then((data) => {
-        notyf.success("Profissional salvo com sucesso!");
-        closeOffcanvas();
-        window.location.reload(); // Recarrega a página para atualizar a lista
-      })
-      .catch((error) => {
-        console.error("Erro:", error);
-        notyf.error("Erro ao salvar profissional: " + error.message);
-      });
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
+    }
+
+    const data = await response.json();
+    if (!data.id) throw new Error("ID do profissional não retornado");
+
+    notyf.success("Profissional salvo com sucesso!");
+    return data.id;
   }
 
-  // MÁSCARA DE CELULAR
-  function applyPhoneMask() {
-    if (!elements.celular) return;
+  async function saveExpediente() {
+    const idProfissional = document.getElementById(
+      "profissional-id-hidden"
+    )?.value;
+    if (!idProfissional) throw new Error("ID do profissional não encontrado");
 
-    elements.celular.addEventListener("input", function (e) {
-      let value = e.target.value.replace(/\D/g, "");
-      if (value.length > 11) value = value.slice(0, 11);
+    const formData = new FormData();
+    formData.append("rota", "salvarExpediente");
+    formData.append("idProfissional", idProfissional);
 
-      if (value.length > 2) {
-        value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+    const diasCheckboxes = document.querySelectorAll(
+      'input[name="profissional-dias[]"]:checked'
+    );
+    if (diasCheckboxes.length === 0)
+      throw new Error("Selecione pelo menos um dia");
+
+    diasCheckboxes.forEach((checkbox) => {
+      const dia = checkbox.value;
+      formData.append("dias[]", dia);
+
+      const campos = {
+        abertura: document.querySelector(
+          `input[name="profissional-abertura_${dia}"]`
+        ),
+        fechamento: document.querySelector(
+          `input[name="profissional-fechamento_${dia}"]`
+        ),
+        inicioIntervalo: document.querySelector(
+          `input[name="profissional-inicio_intervalo_${dia}"]`
+        ),
+        fimIntervalo: document.querySelector(
+          `input[name="profissional-fim_intervalo_${dia}"]`
+        ),
+      };
+
+      if (!campos.abertura.value || !campos.fechamento.value) {
+        throw new Error(`Preencha todos os horários para ${dia}`);
       }
-      if (value.length > 10) {
-        value = `${value.slice(0, 10)}-${value.slice(10)}`;
-      }
 
-      e.target.value = value;
+      formData.append(`abertura_${dia}`, campos.abertura.value);
+      formData.append(`fechamento_${dia}`, campos.fechamento.value);
+      if (campos.inicioIntervalo.value)
+        formData.append(`inicioIntervalo_${dia}`, campos.inicioIntervalo.value);
+      if (campos.fimIntervalo.value)
+        formData.append(`fimIntervalo_${dia}`, campos.fimIntervalo.value);
+    });
+
+    const response = await fetch("../public/ProfissionalRoutes.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
+    }
+
+    notyf.success("Expediente salvo com sucesso!");
+    closeOffcanvas();
+    window.location.reload();
+  }
+
+  // Funções auxiliares
+  function fillProfissionalData(data) {
+    elements.nome.value = data.nome || "";
+    elements.celular.value = data.celular || "";
+    elements.profissao.value = data.especialidade || "";
+    updateHiddenIdField(data.idProfissional);
+  }
+
+  function updateHiddenIdField(id) {
+    let hiddenField = document.getElementById("profissional-id-hidden");
+    if (!hiddenField) {
+      hiddenField = document.createElement("input");
+      hiddenField.type = "hidden";
+      hiddenField.id = "profissional-id-hidden";
+      hiddenField.name = "idProfissional";
+      elements.horarioForm.appendChild(hiddenField);
+    }
+    hiddenField.value = id;
+  }
+
+  function resetForms() {
+    // Limpa formulário de profissional
+    elements.profissionalForm.reset();
+
+    // Limpa formulário de expediente
+    document
+      .querySelectorAll('input[name^="profissional-"][type="text"]')
+      .forEach((input) => {
+        input.value = "";
+      });
+    document
+      .querySelectorAll('input[name="profissional-dias[]"]')
+      .forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+
+    // Remove qualquer campo de ID existente
+    document
+      .querySelectorAll('input[name="idProfissional"]')
+      .forEach((el) => el.remove());
+  }
+
+  function handleError(error) {
+    notyf.error(error.message);
+  }
+
+  // Event Listeners
+  if (elements.openOffcanvas) {
+    elements.openOffcanvas.addEventListener("click", () => {
+      // Força a limpeza completa
+      resetForms();
+      openOffcanvas();
     });
   }
-
-  // EVENT LISTENERS
-  if (elements.openOffcanvas) {
-    elements.openOffcanvas.addEventListener("click", () => openOffcanvas());
-  }
-  if (elements.closeOffcanvas) {
+  if (elements.closeOffcanvas)
     elements.closeOffcanvas.addEventListener("click", closeOffcanvas);
-  }
-  if (elements.overlay) {
+  if (elements.overlay)
     elements.overlay.addEventListener("click", closeOffcanvas);
-  }
-  if (elements.cancelButton) {
+  if (elements.cancelButton)
     elements.cancelButton.addEventListener("click", closeOffcanvas);
-  }
-  if (elements.navCadastro) {
+  if (elements.navCadastro)
     elements.navCadastro.addEventListener("click", showCadastroForm);
-  }
-  if (elements.navExpediente) {
+  if (elements.navExpediente)
     elements.navExpediente.addEventListener("click", showExpedienteForm);
-  }
-  if (elements.saveButton) {
-    elements.saveButton.addEventListener("click", saveData);
-  }
+  if (elements.saveButton)
+    elements.saveButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      saveData();
+    });
 
-  // Evento para edição de profissional
+  // Eventos para edição/exclusão
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("btn-editar")) {
       e.preventDefault();
-
-      const existingIdInput = document.querySelector(
-        'input[name="idProfissional"]'
-      );
-      if (existingIdInput) {
-        existingIdInput.remove();
-      }
-
-      const idInput = document.createElement("input");
-      idInput.type = "hidden";
-      idInput.name = "idProfissional";
-      idInput.value = e.target.getAttribute("data-id");
-      elements.profissionalForm.appendChild(idInput);
-
-      openOffcanvas({
+      const row = e.target.closest("tr");
+      const profissionalData = {
+        idProfissional: e.target.getAttribute("data-id"),
         nome: e.target.getAttribute("data-nome"),
         celular: e.target.getAttribute("data-celular"),
         especialidade: e.target.getAttribute("data-especialidade"),
-      });
-
-      elements.saveButton.textContent = "Atualizar Profissional";
+      };
+      openOffcanvas(profissionalData);
+      loadExpediente(profissionalData.idProfissional);
     }
 
-    // Evento para exclusão de profissional
     if (e.target.classList.contains("btn-excluir")) {
       e.preventDefault();
-      const idProfissional = e.target.getAttribute("data-id");
-      const nomeProfissional = e.target
+      const id = e.target.getAttribute("data-id");
+      const nome = e.target
         .closest("tr")
         .querySelector("td:nth-child(2)").textContent;
-
-      if (confirm(`Tem certeza que deseja excluir ${nomeProfissional}?`)) {
-        excluirProfissional(idProfissional);
+      if (
+        confirm(`Tem certeza que deseja excluir ${nome} e todos seus horários?`)
+      ) {
+        excluirProfissional(id);
       }
     }
   });
 
-  // INICIALIZAÇÃO
+  // Funções secundárias
+  async function loadExpediente(idProfissional) {
+    try {
+      const response = await fetch(
+        `../controller/ExpedienteController.php?action=getByProfissional&id=${idProfissional}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Falha ao carregar expediente");
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Erro ao carregar expediente");
+      }
+
+      const expedientes = result.data || [];
+
+      document
+        .querySelectorAll('input[name="profissional-dias[]"]')
+        .forEach((cb) => (cb.checked = false));
+      document
+        .querySelectorAll(".profissional-horario-input")
+        .forEach((input) => (input.value = ""));
+
+      expedientes.forEach((exp) => {
+        const dia = exp.diaSemana;
+        const checkbox = document.querySelector(
+          `input[name="profissional-dias[]"][value="${dia}"]`
+        );
+        if (checkbox) checkbox.checked = true;
+
+        const setField = (name, value) => {
+          const field = document.querySelector(`input[name="${name}"]`);
+          if (field && value) field.value = value;
+        };
+
+        setField(`profissional-abertura_${dia}`, exp.inicioExpediente);
+        setField(`profissional-fechamento_${dia}`, exp.fimExpediente);
+        setField(`profissional-inicio_intervalo_${dia}`, exp.inicioIntervalo);
+        setField(`profissional-fim_intervalo_${dia}`, exp.fimIntervalo);
+      });
+    } catch (error) {
+      notyf.error("Não foi possível carregar os horários salvos");
+    }
+  }
+
+  async function excluirProfissional(id) {
+    try {
+      const response = await fetch("../public/ProfissionalRoutes.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `rota=excluirProfissional&idProfissional=${id}`,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        notyf.success(result.message);
+        document
+          .querySelector(`.btn-excluir[data-id="${id}"]`)
+          .closest("tr")
+          .remove();
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      notyf.error(error.message);
+    }
+  }
+
+  // Inicialização
   applyPhoneMask();
+  configurarDropdownsHorarios();
   profissionalConfigurado = true;
 }
 
-// Configuração inicial
+// Funções de utilidade
+function applyPhoneMask() {
+  const celular = document.getElementById("profissional-celular");
+  if (!celular) return;
+
+  celular.addEventListener("input", function (e) {
+    let value = e.target.value.replace(/\D/g, "");
+    if (value.length > 11) value = value.slice(0, 11);
+
+    if (value.length > 0) {
+      value = value.replace(/^(\d{2})(\d)/g, "($1) $2");
+      if (value.length > 10) {
+        value = value.replace(/(\d{5})(\d)/, "$1-$2");
+      }
+    }
+
+    e.target.value = value;
+  });
+}
+
+function configurarDropdownsHorarios() {
+  function gerarOpcoesHorario() {
+    const horas = [];
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 5) {
+        horas.push(
+          `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}h`
+        );
+      }
+    }
+    return horas;
+  }
+
+  const opcoesHorario = gerarOpcoesHorario();
+
+  document
+    .querySelectorAll(".profissional-dropdown-container")
+    .forEach((container) => {
+      const input = container.querySelector(".profissional-horario-input");
+      const dropdown = container.querySelector(
+        ".profissional-horario-dropdown"
+      );
+
+      dropdown.innerHTML = "";
+      opcoesHorario.forEach((hora) => {
+        const option = document.createElement("div");
+        option.className = "profissional-dropdown-option";
+        option.textContent = hora;
+        option.addEventListener("click", () => {
+          input.value = hora;
+          dropdown.classList.remove("show");
+        });
+        dropdown.appendChild(option);
+      });
+
+      input.addEventListener("focus", () => dropdown.classList.add("show"));
+      input.addEventListener("blur", () =>
+        setTimeout(() => dropdown.classList.remove("show"), 200)
+      );
+      input.addEventListener("input", () => {
+        const termo = input.value.toLowerCase();
+        dropdown
+          .querySelectorAll(".profissional-dropdown-option")
+          .forEach((opt) => {
+            opt.style.display = opt.textContent.toLowerCase().includes(termo)
+              ? "block"
+              : "none";
+          });
+      });
+    });
+}
+
+// Inicialização
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", configurarProfissional);
 } else {

@@ -15,27 +15,106 @@ class ProfissionalController
 
   public function salvarProfissional()
   {
-    // Verifica se é edição ou novo cadastro
-    $idProfissional = isset($_POST['idProfissional']) ? $_POST['idProfissional'] : null;
-    $nome = $_POST['nome'];
-    $especialidade = $_POST['especialidade'];
-    $celular = $_POST['celular'];
+    header('Content-Type: application/json'); // Adicione esta linha
 
     try {
+      $idProfissional = isset($_POST['idProfissional']) ? $_POST['idProfissional'] : null;
+      $nome = $_POST['nome'];
+      $especialidade = $_POST['especialidade'];
+      $celular = $_POST['celular'];
+
       if ($idProfissional) {
-        // Atualização
         $stmt = $this->conexao->prepare("UPDATE profissional SET nome = ?, especialidade = ?, celular = ? WHERE idProfissional = ?");
         $stmt->execute([$nome, $especialidade, $celular, $idProfissional]);
       } else {
-        // Novo cadastro
         $stmt = $this->conexao->prepare("INSERT INTO profissional (nome, especialidade, celular) VALUES (?, ?, ?)");
         $stmt->execute([$nome, $especialidade, $celular]);
+        $idProfissional = $this->conexao->lastInsertId();
       }
 
-      header("Location: ../pages/profissional.php");
+      // Retorne sempre JSON
+      echo json_encode([
+        'success' => true,
+        'id' => $idProfissional,
+        'message' => 'Profissional salvo com sucesso'
+      ]);
       exit;
     } catch (PDOException $e) {
-      echo "Erro ao salvar profissional: " . $e->getMessage();
+      // Retorne erros também como JSON
+      http_response_code(500);
+      echo json_encode([
+        'success' => false,
+        'error' => 'Erro ao salvar profissional: ' . $e->getMessage()
+      ]);
+      exit;
+    }
+  }
+
+  public function salvarExpediente()
+  {
+    if (!isset($_POST['profissional-dias'])) {
+      header("Location: ../pages/profissional.php?error=Selecione pelo menos um dia");
+      exit;
+    }
+
+    $diasSelecionados = $_POST['profissional-dias'];
+    $idProfissional = $_POST['idProfissional']; // Você precisará enviar esse ID no formulário
+
+    try {
+      $this->conexao->beginTransaction();
+
+      // Primeiro remove os horários antigos
+      $stmtDelete = $this->conexao->prepare("DELETE FROM expediente WHERE profissional_id = ?");
+      $stmtDelete->execute([$idProfissional]);
+
+      // Prepara a inserção
+      $stmtInsert = $this->conexao->prepare("
+            INSERT INTO expediente 
+            (profissional_id, dia_semana, abertura, fechamento, inicio_intervalo, fim_intervalo) 
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+
+      // Para cada dia selecionado, insere os horários
+      foreach ($diasSelecionados as $dia) {
+        $abertura = $_POST["profissional-abertura_$dia"] ?? null;
+        $fechamento = $_POST["profissional-fechamento_$dia"] ?? null;
+        $inicioIntervalo = $_POST["profissional-inicio_intervalo_$dia"] ?? null;
+        $fimIntervalo = $_POST["profissional-fim_intervalo_$dia"] ?? null;
+
+        // Validação básica
+        if (empty($abertura) || empty($fechamento)) {
+          continue; // Pula dias sem horário definido
+        }
+
+        $stmtInsert->execute([
+          $idProfissional,
+          $dia,
+          $abertura,
+          $fechamento,
+          $inicioIntervalo,
+          $fimIntervalo
+        ]);
+      }
+
+      $this->conexao->commit();
+      header("Location: ../pages/profissional.php?success=Horários atualizados com sucesso");
+      exit;
+    } catch (PDOException $e) {
+      $this->conexao->rollBack();
+      header("Location: ../pages/profissional.php?error=Erro ao salvar horários");
+      exit;
+    }
+  }
+
+  public function buscarExpediente($idProfissional)
+  {
+    try {
+      $stmt = $this->conexao->prepare("SELECT * FROM expediente WHERE profissional_id = ?");
+      $stmt->execute([$idProfissional]);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      error_log("Erro ao buscar expediente: " . $e->getMessage());
+      return [];
     }
   }
 
@@ -55,32 +134,39 @@ class ProfissionalController
 
   public function excluirProfissional()
   {
-    if (!isset($_POST['idProfissional'])) {
-      error_log("ID do profissional não fornecido");
-      http_response_code(400);
-      echo "ID do profissional não fornecido";
-      return;
-    }
-
-    $idProfissional = $_POST['idProfissional'];
+    header('Content-Type: application/json');
 
     try {
-      $stmt = $this->conexao->prepare("DELETE FROM profissional WHERE idProfissional = ?");
-      $stmt->execute([$idProfissional]);
-
-      if ($stmt->rowCount() > 0) {
-        // Retorna sucesso
-        http_response_code(200);
-        echo "Profissional excluído com sucesso";
-      } else {
-        // Nenhum registro foi afetado (ID não encontrado)
-        http_response_code(404);
-        echo "Profissional não encontrado";
+      if (!isset($_POST['idProfissional'])) {
+        throw new Exception("ID do profissional não fornecido");
       }
-    } catch (PDOException $e) {
-      error_log("Erro ao excluir profissional: " . $e->getMessage());
+
+      $id = $_POST['idProfissional'];
+      $this->conexao->beginTransaction();
+
+      // 1. Primeiro exclui o expediente
+      $stmtExpediente = $this->conexao->prepare("DELETE FROM expediente WHERE idProfissional = ?");
+      $stmtExpediente->execute([$id]);
+
+      // 2. Depois exclui o profissional
+      $stmtProfissional = $this->conexao->prepare("DELETE FROM profissional WHERE idProfissional = ?");
+      $stmtProfissional->execute([$id]);
+
+      $this->conexao->commit();
+
+      echo json_encode([
+        'success' => true,
+        'message' => 'Profissional e horários excluídos com sucesso'
+      ]);
+      exit;
+    } catch (Exception $e) {
+      $this->conexao->rollBack();
       http_response_code(500);
-      echo "Erro ao excluir profissional: " . $e->getMessage();
+      echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+      ]);
+      exit;
     }
   }
 }
