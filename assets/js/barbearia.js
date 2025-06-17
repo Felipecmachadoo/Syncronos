@@ -1,3 +1,97 @@
+// Funções do dropdown (fora do DOMContentLoaded para serem globais)
+function toggleHours() {
+  const hoursList = document.getElementById("hours-list");
+  const toggleButton = document.querySelector(".hours-toggle");
+
+  if (hoursList.style.display === "none") {
+    hoursList.style.display = "block";
+    toggleButton.innerHTML = "Horários de funcionamento ▲";
+    if (!hoursList.hasAttribute("data-loaded")) {
+      loadBusinessHours();
+    }
+  } else {
+    hoursList.style.display = "none";
+    toggleButton.innerHTML = "Horários de funcionamento ▼";
+  }
+}
+
+async function loadBusinessHours() {
+  try {
+    const response = await fetch("../api/api_horarios.php");
+
+    const horarios = await response.json();
+
+    if (!Array.isArray(horarios) || horarios.length === 0) {
+      throw new Error("Resposta vazia ou formato inválido");
+    }
+
+    // Mapeamento dos dias da semana para números (FullCalendar usa 0 = domingo, 1 = segunda, etc)
+    const diasMap = {
+      domingo: 0,
+      segunda: 1,
+      terca: 2,
+      quarta: 3,
+      quinta: 4,
+      sexta: 5,
+      sabado: 6,
+    };
+
+    const businessHours = horarios.map((h) => ({
+      daysOfWeek: [diasMap[h.diaSemana.toLowerCase()]],
+      startTime: h.horaInicio.slice(0, 5),
+      endTime: h.horaFim.slice(0, 5),
+    }));
+
+    console.log("Horários formatados:", businessHours);
+
+    return businessHours;
+  } catch (error) {
+    console.error("Erro ao carregar horários:", error);
+    return [];
+  }
+}
+
+function formatBusinessHours(horarios) {
+  const diasOrdenados = [
+    "segunda",
+    "terca",
+    "quarta",
+    "quinta",
+    "sexta",
+    "sabado",
+    "domingo",
+  ];
+  const diasNomes = {
+    segunda: "Segunda-feira",
+    terca: "Terça-feira",
+    quarta: "Quarta-feira",
+    quinta: "Quinta-feira",
+    sexta: "Sexta-feira",
+    sabado: "Sábado",
+    domingo: "Domingo",
+  };
+
+  let html = '<ul style="list-style-type:none; padding-left:0;">';
+  let hasHours = false;
+
+  diasOrdenados.forEach((dia) => {
+    if (horarios[dia] && horarios[dia].abertura && horarios[dia].fechamento) {
+      hasHours = true;
+      html += `
+        <li style="margin-bottom:8px;">
+          <strong>${diasNomes[dia]}:</strong> 
+          ${horarios[dia].abertura} - ${horarios[dia].fechamento}
+        </li>
+      `;
+    }
+  });
+
+  html += "</ul>";
+  return hasHours
+    ? html
+    : "<p>Não há horários de funcionamento cadastrados</p>";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // Elementos do DOM
   const agendarModalEl = document.getElementById("agendarModal");
@@ -14,10 +108,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let profissionais = [];
   let profissionalSelecionado = null;
   let dataSelecionada = null;
-  let servicoSelecionado = null; // Adicionado para armazenar o serviço selecionado
+  let servicoSelecionado = null;
 
   // --- Funções Auxiliares ---
-  // Adicione no início ou em local visível do seu arquivo JS
   function toggleUserDropdown() {
     const dropdownMenu = document.getElementById("userDropdownMenu");
     const dropdown = document.querySelector(".user-dropdown");
@@ -43,10 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Tornar a função global para ser acessível pelo HTML
   window.toggleUserDropdown = toggleUserDropdown;
 
-  // Fechar o dropdown ao clicar fora
   document.addEventListener("click", function (event) {
     const dropdown = document.querySelector(".user-dropdown");
     if (!dropdown.contains(event.target)) {
@@ -165,7 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    // Adiciona eventos aos botões de horário
     document.querySelectorAll(".horario-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const confirmacao = confirm(
@@ -185,7 +275,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const userId = document.body.dataset.userId;
 
-      // Cria a data no fuso horário local
       const dataInicio = new Date(dataSelecionada);
       const [h, m] = hora.split(":").map(Number);
       dataInicio.setHours(h, m, 0, 0);
@@ -193,7 +282,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const dataFim = new Date(dataInicio);
       dataFim.setMinutes(dataInicio.getMinutes() + servicoSelecionado.duracao);
 
-      // Formata sem conversão para UTC
       const formatarParaServidor = (date) => {
         const pad = (num) => num.toString().padStart(2, "0");
         return (
@@ -214,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Status: "Agendado",
       };
 
-      console.log("Enviando:", agendamento); // Para debug
+      console.log("Enviando:", agendamento);
 
       const response = await fetch(
         "../controller/AgendamentoController.php?action=create",
@@ -225,7 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
-      // Verifica primeiro se a resposta é JSON válido
       const text = await response.text();
       let result;
 
@@ -294,7 +381,6 @@ document.addEventListener("DOMContentLoaded", () => {
       dateCarousel.appendChild(dataItem);
     });
 
-    // Navegação do carrossel
     const container = datasSection.querySelector(".date-carousel-container");
     const prevBtn = datasSection.querySelector(".carousel-prev");
     const nextBtn = datasSection.querySelector(".carousel-next");
@@ -307,14 +393,12 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  // Evento para voltar aos profissionais
   btnVoltarProfissionais.addEventListener("click", () => {
     profissionalSelecionado = null;
     datasSection.style.display = "none";
     profissionaisSection.style.display = "block";
   });
 
-  // Carregar profissionais
   async function carregarProfissionais() {
     profissionaisSection.innerHTML = "<p>Carregando profissionais...</p>";
 
@@ -355,17 +439,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Inicialização - Evento de clique no botão Agendar
   document.querySelectorAll(".btn-agendar").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
 
-      // Obtém o serviço selecionado (do card pai)
       const card = btn.closest(".service-card");
       servicoSelecionado = {
         idServico: card.dataset.servicoId,
         Nome: card.querySelector("h3").textContent,
-        duracao: 30, // Ou obtenha de um data-attribute
+        duracao: 30,
       };
 
       profissionalSelecionado = null;
@@ -378,8 +460,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Fechar modal corretamente
   agendarModalEl.addEventListener("hidden.bs.modal", () => {
     document.activeElement.blur();
   });
+
+  // Inicialização do dropdown de horários
+  const hoursToggleBtn = document.querySelector(".hours-toggle");
+  if (hoursToggleBtn) {
+    hoursToggleBtn.addEventListener("click", toggleHours);
+  }
 });

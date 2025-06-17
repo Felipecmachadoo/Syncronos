@@ -150,24 +150,42 @@ class HorarioController
     return $fim > $inicio;
   }
 
-  public function buscarHorarios(): array
+  public function buscarHorarios()
   {
-    $stmt = $this->conexao->prepare("SELECT diaSemana, horaInicio, horaFim FROM horarios");
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $stmt->closeCursor();
+    try {
+      $horarios = $this->obterHorarios(); // Corrigido: agora busca de um método auxiliar
 
-    $horarios = [];
-    foreach ($result as $row) {
-      $dia = $row['diaSemana'];
-      $horarios[$dia] = [
-        'abertura' => $row['horaInicio'],
-        'fechamento' => $row['horaFim']
-      ];
+      if (empty($horarios)) {
+        throw new Exception('Nenhum horário cadastrado');
+      }
+
+      header('Content-Type: application/json');
+      echo json_encode($horarios);
+      exit;
+    } catch (Exception $e) {
+      header('Content-Type: application/json');
+      http_response_code(500);
+      echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+      ]);
+      exit;
     }
+  }
 
+
+
+  private function obterHorarios(): array
+  {
+    $stmt = $this->conexao->query("SELECT * FROM horarios ORDER BY FIELD(diaSemana, 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo')");
+    $horarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
     return $horarios;
   }
+
+
+
+
 
   private function removerHorario(string $diaSemana): void
   {

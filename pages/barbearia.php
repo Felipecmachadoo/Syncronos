@@ -88,7 +88,7 @@ $servicos = $servicoController->listarServicos();
           📍 R. Siqueira Campos, 1600 - Vila Roberto, Pres. Prudente - SP
         </div>
         <div class="hours-section" id="hours-section">
-          <button class="hours-toggle" onclick="toggleHours()">Horários de funcionamento ▼</button>
+          <button class="hours-toggle" id="hours-toggle-btn">Horários de funcionamento ▼</button>
           <div id="hours-list" style="display:none; margin-top:10px;">
             <!-- Horários vão aparecer aqui -->
           </div>

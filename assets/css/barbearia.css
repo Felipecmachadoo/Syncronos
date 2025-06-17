@@ -648,3 +648,48 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #e6c200;
 }
+
+.hours-section {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hours-toggle {
+  background: none;
+  border: none;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hours-toggle:hover {
+  color: #007bff;
+}
+
+#hours-list {
+  background-color: white;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 12px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#hours-list ul {
+  margin: 0;
+}
+
+#hours-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+#hours-list li:last-child {
+  border-bottom: none;
+}
