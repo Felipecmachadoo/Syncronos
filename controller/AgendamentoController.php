@@ -79,7 +79,7 @@ try {
     'Cor' => '#3a8d60', // Cor fixa
     'dataInicio' => $dataInicioStr,
     'dataFim' => $dataFimStr,
-    'Status' => 'Confirmado'
+    'Status' => 'confirmado'
   ];
 
   // Log dos dados processados (apenas para debug)
