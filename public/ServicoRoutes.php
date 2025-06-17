@@ -7,7 +7,8 @@ $rota = $_POST['rota'] ?? $_GET['rota'] ?? '';
 
 switch ($rota) {
   case 'salvarServico':
-    $controller->salvarServico();
+    header('Content-Type: application/json');
+    echo $controller->salvarServico();
     break;
 
   case 'buscarServico':
@@ -16,10 +17,14 @@ switch ($rota) {
     break;
 
   case 'excluirServico':
-    $id = $_POST['id'] ?? 0;
-    $success = $controller->excluirServico($id);
+    $idServico = $_POST['idServico'] ?? 0;
+    $result = $controller->excluirServico($idServico);
     header('Content-Type: application/json');
-    echo json_encode(['success' => $success]);
+    echo $result; // Já está codificado como JSON pelo controller
+    break;
+
+  case 'salvarServico':
+    echo $controller->salvarServico();
     break;
 
   default:

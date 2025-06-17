@@ -127,7 +127,6 @@ if (isset($_SESSION['erro'])) {
       <table class="profissional-tabela">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Celular</th>
             <th>Profissão</th>
@@ -135,27 +134,33 @@ if (isset($_SESSION['erro'])) {
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($profissionais as $prof) : ?>
+          <?php
+          if (empty($profissionais)) : ?>
             <tr>
-              <td><?php echo htmlspecialchars($prof['idProfissional']); ?></td>
-              <td><?php echo htmlspecialchars($prof['Nome']); ?></td>
-              <td><?php echo htmlspecialchars($prof['Celular']); ?></td>
-              <td><?php echo htmlspecialchars($prof['Especialidade']); ?></td>
-              <td>
-                <button class="btn-editar"
-                  data-id="<?php echo $prof['idProfissional']; ?>"
-                  data-nome="<?php echo htmlspecialchars($prof['Nome']); ?>"
-                  data-celular="<?php echo htmlspecialchars($prof['Celular']); ?>"
-                  data-especialidade="<?php echo htmlspecialchars($prof['Especialidade']); ?>">
-                  Editar
-                </button>
-                <button class="btn-excluir"
-                  data-id="<?php echo $prof['idProfissional']; ?>">
-                  Excluir
-                </button>
-              </td>
+              <td colspan="5">Nenhum profissional cadastrado</td>
             </tr>
-          <?php endforeach; ?>
+            <?php else:
+            foreach ($profissionais as $prof) : ?>
+              <tr>
+                <td><?php echo htmlspecialchars($prof['Nome']); ?></td>
+                <td><?php echo htmlspecialchars($prof['Celular']); ?></td>
+                <td><?php echo htmlspecialchars($prof['Especialidade']); ?></td>
+                <td>
+                  <button class="btn-editar"
+                    data-id="<?php echo $prof['idProfissional']; ?>"
+                    data-nome="<?php echo htmlspecialchars($prof['Nome']); ?>"
+                    data-celular="<?php echo htmlspecialchars($prof['Celular']); ?>"
+                    data-especialidade="<?php echo htmlspecialchars($prof['Especialidade']); ?>">
+                    Editar
+                  </button>
+                  <button class="btn-excluir"
+                    data-id="<?php echo $prof['idProfissional']; ?>">
+                    Excluir
+                  </button>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
         </tbody>
       </table>
     </div>

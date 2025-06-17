@@ -15,6 +15,7 @@ class ServicoController
 
   public function salvarServico()
   {
+    $idServico = $_POST['idServico'] ?? null;
     $nome = $_POST['nome'];
     $descricao = $_POST['descricao'];
     $preco = $_POST['preco'];
@@ -24,25 +25,51 @@ class ServicoController
       return json_encode(['status' => 'error', 'message' => 'Todos os campos são obrigatórios.']);
     }
 
-    // Remove a formatação do preço antes de salvar
+    // Formata o preço
     $precoFormatado = str_replace(['R$', '.', ' '], '', $preco);
     $precoFormatado = str_replace(',', '.', $precoFormatado);
 
     try {
-      $stmtServico = $this->conexao->prepare("INSERT INTO servicos (nome, descricao, preco, duracao) VALUES (?, ?, ?, ?)");
-      $stmtServico->execute([$nome, $descricao, $precoFormatado, $duracao]);
+      if ($idServico) {
+        $stmt = $this->conexao->prepare(
+          "UPDATE servicos SET 
+                nome = ?, 
+                descricao = ?, 
+                preco = ?, 
+                duracao = ? 
+                WHERE idServico = ?"
+        );
+        $stmt->execute([$nome, $descricao, $precoFormatado, $duracao, $idServico]);
 
-      header("Location: ../pages/servico.php");
-      exit;
+        $mensagem = "Serviço atualizado com sucesso";
+      } else {
+        // CRIAR NOVO SERVIÇO
+        $stmt = $this->conexao->prepare(
+          "INSERT INTO servicos 
+                (nome, descricao, preco, duracao) 
+                VALUES (?, ?, ?, ?)"
+        );
+        $stmt->execute([$nome, $descricao, $precoFormatado, $duracao]);
+
+        $mensagem = "Serviço cadastrado com sucesso";
+      }
+
+      return json_encode([
+        'status' => 'success',
+        'message' => $mensagem
+      ]);
     } catch (PDOException $e) {
-      echo "Erro ao cadastrar serviço: " . $e->getMessage();
+      return json_encode([
+        'status' => 'error',
+        'message' => 'Erro ao salvar serviço: ' . $e->getMessage()
+      ]);
     }
   }
 
   public function listarServicos()
   {
     try {
-      $stmt = $this->conexao->prepare("SELECT * FROM servicos ORDER BY nome");
+      $stmt = $this->conexao->prepare("SELECT * FROM servicos ORDER BY idServico ASC");
       $stmt->execute();
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -80,10 +107,27 @@ class ServicoController
     try {
       $stmt = $this->conexao->prepare("DELETE FROM servicos WHERE idServico = ?");
       $stmt->execute([$idServico]);
-      return true;
+
+      // Verifica se alguma linha foi afetada
+      if ($stmt->rowCount() > 0) {
+        return json_encode([
+          'success' => true,
+          'message' => 'Serviço excluído com sucesso'
+        ]);
+      } else {
+        return json_encode([
+          'success' => false,
+          'message' => 'Nenhum serviço encontrado com este ID'
+        ]);
+      }
     } catch (PDOException $e) {
-      echo "Erro ao excluir serviço: " . $e->getMessage();
-      return false;
+      // Log do erro completo
+      error_log("Erro ao excluir serviço: " . $e->getMessage());
+
+      return json_encode([
+        'success' => false,
+        'message' => 'Erro ao excluir serviço: ' . $e->getMessage()
+      ]);
     }
   }
 }

@@ -13,14 +13,11 @@ const notyf = new Notyf({
 function configurarServicos() {
   if (eventosConfigurados) return;
 
-  console.log("Configurando eventos...");
-
   // Configura o offcanvas
   const btnAdicionar = document.getElementById("btnAdicionar");
   const offcanvas = document.getElementById("offcanvas");
   const offcanvasOverlay = document.getElementById("offcanvasOverlay");
   const btnCancelar = document.getElementById("btnCancelar");
-  const btnSalvar = document.getElementById("btnSalvar");
   const formServico = document.getElementById("formServico");
 
   if (
@@ -28,7 +25,6 @@ function configurarServicos() {
     offcanvas &&
     offcanvasOverlay &&
     btnCancelar &&
-    btnSalvar &&
     formServico
   ) {
     function abrirOffcanvas() {
@@ -44,13 +40,6 @@ function configurarServicos() {
       document.body.style.overflow = "";
     }
 
-    // Remove eventos antigos
-    btnAdicionar.onclick = null;
-    offcanvasOverlay.onclick = null;
-    btnCancelar.onclick = null;
-    btnSalvar.onclick = null;
-
-    // Adiciona novos eventos
     btnAdicionar.onclick = abrirOffcanvas;
     offcanvasOverlay.onclick = fecharOffcanvas;
     btnCancelar.onclick = fecharOffcanvas;
@@ -63,7 +52,6 @@ function configurarServicos() {
     const dropdownMenu = document.querySelector(".dropdown-menu");
     const durationInput = document.getElementById("duration-input");
 
-    // Limpa e recria as opções
     dropdownMenu.innerHTML = "";
 
     const durations = [];
@@ -83,7 +71,6 @@ function configurarServicos() {
       dropdownMenu.appendChild(option);
     });
 
-    // Configura eventos do dropdown
     dropdownToggle.onclick = () => {
       dropdownMenu.style.display =
         dropdownMenu.style.display === "block" ? "none" : "block";
@@ -126,13 +113,77 @@ function configurarServicos() {
     });
   }
 
-  // Configura os botões de editar e excluir
   configurarBotoesAcao();
+  configurarSubmitFormulario();
 
   eventosConfigurados = true;
 }
 
-// Função para limpar o formulário
+function configurarSubmitFormulario() {
+  const formServico = document.getElementById("formServico");
+  if (!formServico) return;
+
+  formServico.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const btnSalvar = document.getElementById("btnSalvar");
+    const isEdicao = btnSalvar && btnSalvar.textContent === "Atualizar";
+
+    try {
+      const formData = new FormData(this);
+
+      if (isEdicao) {
+        const idInput = document.getElementById("servico-id");
+        if (idInput) {
+          formData.append("idServico", idInput.value);
+        }
+      }
+
+      const btnSubmit = this.querySelector('[type="submit"]');
+      let originalText = "Salvar";
+      if (btnSubmit) {
+        originalText = btnSubmit.textContent || "Salvar";
+        btnSubmit.textContent = "Processando...";
+        btnSubmit.disabled = true;
+      }
+
+      const response = await fetch("../public/ServicoRoutes.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const responseText = await response.text();
+      let result = {};
+
+      try {
+        result = responseText ? JSON.parse(responseText) : {};
+      } catch (e) {
+        throw new Error("Resposta inválida do servidor");
+      }
+
+      if (btnSubmit) {
+        btnSubmit.textContent = originalText;
+        btnSubmit.disabled = false;
+      }
+
+      if (result.status === "success") {
+        notyf.success(result.message || "Operação realizada com sucesso");
+        setTimeout(() => location.reload(), 1200);
+      } else {
+        notyf.error(result.message || "Erro ao processar a requisição");
+      }
+    } catch (error) {
+      notyf.error(error.message || "Erro ao processar a requisição");
+
+      const btnSubmit = formServico.querySelector('[type="submit"]');
+      if (btnSubmit) {
+        btnSubmit.textContent = isEdicao ? "Atualizar" : "Salvar";
+        btnSubmit.disabled = false;
+      }
+    }
+  });
+}
+
 function limparFormulario() {
   const form = document.getElementById("formServico");
   if (form) {
@@ -160,35 +211,27 @@ function limparFormulario() {
   }
 }
 
-// Função para abrir o offcanvas com dados para edição
 async function abrirEdicaoServico(servicoId) {
   try {
-    console.log(`Buscando serviço com ID: ${servicoId}`);
     const response = await fetch(
       `../public/ServicoRoutes.php?rota=buscarServico&idServico=${servicoId}`
     );
 
     if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
+      throw new Error(`Erro ao buscar serviço`);
     }
 
     const data = await response.json();
-    console.log("Resposta completa:", data);
 
-    // Verifica se há um erro na resposta
     if (data.error) {
       throw new Error(data.error);
     }
 
-    // Verifica se os dados do serviço existem
     if (!data || !data.idServico) {
-      throw new Error("Dados do serviço inválidos ou não encontrados");
+      throw new Error("Serviço não encontrado");
     }
 
     const servico = data;
-    console.log("Dados do serviço recebidos:", servico);
-
-    // Elementos essenciais
     const elements = {
       nome: document.getElementById("nome"),
       descricao: document.getElementById("descricao"),
@@ -202,13 +245,14 @@ async function abrirEdicaoServico(servicoId) {
       offcanvasOverlay: document.getElementById("offcanvasOverlay"),
     };
 
-    // Verificação crítica dos elementos
-    if (!elements.formServico) throw new Error("Formulário não encontrado");
-    if (!elements.offcanvas) throw new Error("Offcanvas não encontrado");
-    if (!elements.offcanvasOverlay)
-      throw new Error("Overlay do offcanvas não encontrado");
+    if (
+      !elements.formServico ||
+      !elements.offcanvas ||
+      !elements.offcanvasOverlay
+    ) {
+      throw new Error("Elementos do formulário não encontrados");
+    }
 
-    // Preenche os campos (ajustado para maiúsculas conforme seu HTML)
     if (elements.nome) elements.nome.value = servico.Nome || "";
     if (elements.descricao) elements.descricao.value = servico.Descricao || "";
 
@@ -223,7 +267,6 @@ async function abrirEdicaoServico(servicoId) {
     if (elements.selectedDuration)
       elements.selectedDuration.textContent = servico.Duracao || "5 Min";
 
-    // Adiciona/atualiza o campo hidden para o ID
     let idInput = document.getElementById("servico-id");
     if (!idInput) {
       idInput = document.createElement("input");
@@ -234,39 +277,22 @@ async function abrirEdicaoServico(servicoId) {
     }
     idInput.value = servico.idServico;
 
-    // Atualiza UI para modo edição
     if (elements.btnSalvar) elements.btnSalvar.textContent = "Atualizar";
     if (elements.offcanvasTitle)
       elements.offcanvasTitle.textContent = "Editar Serviço";
 
-    // Abre o offcanvas
     elements.offcanvas.classList.add("active");
     elements.offcanvasOverlay.classList.add("active");
     document.body.style.overflow = "hidden";
   } catch (error) {
-    console.error("Erro detalhado:", error);
     notyf.error(error.message || "Erro ao carregar dados do serviço");
-
-    // Debug adicional
-    console.log("ID usado na requisição:", servicoId);
-    console.log(
-      "URL da requisição:",
-      `../public/ServicoRoutes.php?rota=buscarServico&idServico=${servicoId}`
-    );
   }
 }
 
-// Função para excluir serviço
-// Função para excluir serviço (MODIFICADA)
 async function excluirServico(servicoId) {
   try {
-    // Usando o confirm nativo do JavaScript
     const confirmacao = confirm("Tem certeza que deseja excluir este serviço?");
-
-    if (!confirmacao) {
-      console.log("Exclusão cancelada pelo usuário");
-      return;
-    }
+    if (!confirmacao) return;
 
     const response = await fetch("../public/ServicoRoutes.php", {
       method: "POST",
@@ -276,23 +302,27 @@ async function excluirServico(servicoId) {
       body: `rota=excluirServico&idServico=${servicoId}`,
     });
 
-    const result = await response.json();
+    const text = await response.text();
+    let result;
+
+    try {
+      result = JSON.parse(text);
+    } catch {
+      throw new Error("Resposta inválida do servidor");
+    }
 
     if (result.success) {
-      notyf.success("Serviço excluído com sucesso");
-      setTimeout(() => location.reload(), 1500);
+      notyf.success(result.message || "Serviço excluído com sucesso");
+      setTimeout(() => location.reload(), 1200);
     } else {
       notyf.error(result.message || "Erro ao excluir serviço");
     }
   } catch (error) {
-    console.error("Erro ao excluir serviço:", error);
-    notyf.error("Erro ao comunicar com o servidor");
+    notyf.error("Erro ao processar a exclusão: " + error.message);
   }
 }
 
-// Configura os botões de ação (editar/excluir)
 function configurarBotoesAcao() {
-  // Botões de editar (mantido igual)
   document.querySelectorAll(".btn-editar").forEach((btn) => {
     btn.onclick = function () {
       const servicoId = this.getAttribute("data-id");
@@ -304,7 +334,6 @@ function configurarBotoesAcao() {
     };
   });
 
-  // Botões de excluir (SIMPLIFICADO - agora só chama a função excluirServico diretamente)
   document.querySelectorAll(".btn-excluir").forEach((btn) => {
     btn.onclick = function () {
       const servicoId = this.getAttribute("data-id");
@@ -317,7 +346,6 @@ function configurarBotoesAcao() {
   });
 }
 
-// Observador de mutação para elementos dinâmicos
 const observer = new MutationObserver((mutations) => {
   const elementosRelevantes = [
     "btnAdicionar",
@@ -338,13 +366,11 @@ const observer = new MutationObserver((mutations) => {
   });
 
   if (elementosAdicionados) {
-    console.log("Novos elementos detectados, reconfigurando...");
     eventosConfigurados = false;
     configurarServicos();
   }
 });
 
-// Inicialização
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     configurarServicos();
@@ -361,7 +387,6 @@ if (document.readyState === "loading") {
   });
 }
 
-// Reset ao sair da página
 window.addEventListener("pagehide", () => {
   eventosConfigurados = false;
 });
