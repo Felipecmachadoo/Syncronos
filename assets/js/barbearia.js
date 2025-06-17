@@ -185,6 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const userId = document.body.dataset.userId;
 
+      // Cria a data no fuso horário local
       const dataInicio = new Date(dataSelecionada);
       const [h, m] = hora.split(":").map(Number);
       dataInicio.setHours(h, m, 0, 0);
@@ -192,16 +193,28 @@ document.addEventListener("DOMContentLoaded", () => {
       const dataFim = new Date(dataInicio);
       dataFim.setMinutes(dataInicio.getMinutes() + servicoSelecionado.duracao);
 
+      // Formata sem conversão para UTC
+      const formatarParaServidor = (date) => {
+        const pad = (num) => num.toString().padStart(2, "0");
+        return (
+          `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+            date.getDate()
+          )} ` + `${pad(date.getHours())}:${pad(date.getMinutes())}:00`
+        );
+      };
+
       const agendamento = {
         idUsuario: userId,
         idServico: servicoSelecionado.idServico,
         idProfissional: profissionalSelecionado.idProfissional,
-        Titulo: `${servicoSelecionado.Nome} com ${profissionalSelecionado.Nome}`,
+        Titulo: `${servicoSelecionado.Nome}`,
         Cor: "#3788d8",
-        dataInicio: dataInicio.toISOString(),
-        dataFim: dataFim.toISOString(),
+        dataInicio: formatarParaServidor(dataInicio),
+        dataFim: formatarParaServidor(dataFim),
         Status: "Agendado",
       };
+
+      console.log("Enviando:", agendamento); // Para debug
 
       const response = await fetch(
         "../controller/AgendamentoController.php?action=create",
