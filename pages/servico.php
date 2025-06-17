@@ -2,6 +2,20 @@
 require_once '../controller/ServicoController.php';
 
 $controller = new ServicoController();
+
+session_start();
+
+// Verifica se está logado
+if (!isset($_SESSION['usuario_id'])) {
+  header('Location: ../auth/login.php');
+  exit;
+}
+
+// Verifica se é administrador
+if (!isset($_SESSION['Tipo']) || $_SESSION['Tipo'] !== 'administrador') {
+  header('Location: ../acesso-negado.php'); // ou redirecione onde quiser
+  exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -89,7 +103,7 @@ $controller = new ServicoController();
       </li>
 
       <li>
-        <a href="../app/logout.php">
+        <a href="../auth/logout.php">
           <span class="material-symbols-outlined">logout</span> Sair
         </a>
       </li>

@@ -169,3 +169,14 @@ a {
 #forget-password a:hover {
   text-decoration: underline;
 }
+
+.user-logged {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #fff;
+}
