@@ -136,9 +136,10 @@ if (!isset($_SESSION['Tipo']) || $_SESSION['Tipo'] !== 'administrador') {
           <span id="msgViewEvento"></span>
 
           <div class="visualizarEvento" id="visualizarEvento">
+            <input type="hidden" id="visualizar_idAgendamento" value="">
 
             <div class="info-row">
-              <strong>ID:</strong>
+              <strong>Cliente:</strong>
               <span id="visualizar_id"></span>
             </div>
             <div class="info-row">

@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
             color: evento.cor, // Mapeia cor → color
             extendedProps: {
               status: evento.extendedProps.status,
+              nomeUsuario: evento.extendedProps.nomeUsuario, // <-- mapear aqui
             },
           };
         });
@@ -69,7 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("editarModalLabel").style.display = "none";
 
       // Enviar para a janela modal os dados do evento
-      document.getElementById("visualizar_id").innerText = info.event.id;
+      document.getElementById("visualizar_id").innerText =
+        info.event.extendedProps.nomeUsuario ?? "Agendamento manual";
       document.getElementById("visualizar_title").innerText = info.event.title;
       document.getElementById("visualizar_start").innerText =
         info.event.start.toLocaleString();
@@ -77,6 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
         info.event.end !== null
           ? info.event.end.toLocaleString()
           : info.event.start.toLocaleString();
+
+      document.getElementById("visualizar_idAgendamento").value = info.event.id;
 
       // Enviar os dados do evento para o formulário editar
       document.getElementById("edit_id").value = info.event.id;
@@ -358,7 +362,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Verificar se o usuário confirmou
       if (confirmacao) {
         // Receber o id do evento
-        var idEvento = document.getElementById("visualizar_id").textContent;
+        var idEvento = document.getElementById(
+          "visualizar_idAgendamento"
+        ).value;
 
         // Chamar o arquivo PHP responsável apagar o evento
         const dados = await fetch(

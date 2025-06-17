@@ -4,6 +4,11 @@ if (!isset($_SESSION['usuario_id'])) {
   header('Location: ../auth/login.php');
   exit;
 }
+
+require_once '../controller/ServicoController.php';
+
+$servicoController = new ServicoController();
+$servicos = $servicoController->listarServicos();
 ?>
 
 <!DOCTYPE html>
@@ -13,11 +18,12 @@ if (!isset($_SESSION['usuario_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/css/barbearia.css" />
   <title>Dark Prete's - Syncronos</title>
 </head>
 
-<body>
+<body data-user-id="<?= $_SESSION['usuario_id'] ?>">
   <!-- Header -->
   <header class="header">
     <div class="logo">
@@ -50,7 +56,7 @@ if (!isset($_SESSION['usuario_id'])) {
             </span>
             <span class="material-symbols-outlined dropdown-arrow">keyboard_arrow_down</span>
           </button>
-          <div class="user-dropdown-menu" id="userDropdownMenu">
+          <div class="user-dropdown-menu" id="userDropdownMenu" style="display: none;">
             <a href="#" class="dropdown-item">
               <span class="material-symbols-outlined">event_note</span>
               Meus Agendamentos
@@ -81,10 +87,11 @@ if (!isset($_SESSION['usuario_id'])) {
         <div class="address">
           📍 R. Siqueira Campos, 1600 - Vila Roberto, Pres. Prudente - SP
         </div>
-        <div class="hours-section">
-          <button class="hours-toggle" onclick="toggleHours()">
-            Horários de funcionamento ▼
-          </button>
+        <div class="hours-section" id="hours-section">
+          <button class="hours-toggle" onclick="toggleHours()">Horários de funcionamento ▼</button>
+          <div id="hours-list" style="display:none; margin-top:10px;">
+            <!-- Horários vão aparecer aqui -->
+          </div>
         </div>
       </div>
     </div>
@@ -107,66 +114,62 @@ if (!isset($_SESSION['usuario_id'])) {
           </div>
         </div>
 
-        <!-- Service Cards -->
-        <div class="service-card">
-          <div class="service-info">
-            <h3>Barboterapia</h3>
-            <p class="service-description">
-              É um procedimento que tem como objetivo promover o relaxamento através da toalha...
-            </p>
-            <div class="service-price">R$ 40,00</div>
+        <?php foreach ($servicos as $servico): ?>
+          <div class="service-card" data-servico-id="<?= $servico['idServico'] ?>">
+            <div class="service-info">
+              <h3><?= htmlspecialchars($servico['Nome']) ?></h3>
+              <p class="service-description">
+                <?= htmlspecialchars($servico['Descricao']) ?>
+              </p>
+              <div class="service-price">
+                R$ <?= number_format($servico['Preco'], 2, ',', '.') ?>
+              </div>
+            </div>
+            <button class="btn-agendar btn btn-primary">Agendar</button>
           </div>
-          <button class="btn-service-schedule">Agendar</button>
-        </div>
-
-        <div class="service-card">
-          <div class="service-info">
-            <h3>Botox Capilar</h3>
-            <p class="service-description">
-              É um tratamento estético que hidrata, tira o frizz e reduz o volume dos cabelos...
-            </p>
-            <div class="service-price">R$ 80,00</div>
-          </div>
-          <button class="btn-service-schedule">Agendar</button>
-        </div>
-
-        <div class="service-card">
-          <div class="service-info">
-            <h3>Cabelo e Barboterapia</h3>
-            <p class="service-description">
-              Nosso combo você alinha o corte do cabelo e a barba com higienização + toalha quente...
-            </p>
-            <div class="service-price">R$ 80,00</div>
-          </div>
-          <button class="btn-service-schedule">Agendar</button>
-        </div>
-
-        <div class="service-card">
-          <div class="service-info">
-            <h3>Cabelo, Barba e Sobrancelha</h3>
-            <p class="service-description">
-              Combo de corte de cabelo + barboterapia + limpeza sobrancelha na navalha...
-            </p>
-            <div class="service-price">R$ 90,00</div>
-          </div>
-          <button class="btn-service-schedule">Agendar</button>
-        </div>
-
-        <div class="service-card">
-          <div class="service-info">
-            <h3>Camuflagem dos Fios Brancos</h3>
-            <p class="service-description">
-              A Camuflagem dos fios brancos traz a naturalidade dos fios escuros de volta, pod...
-            </p>
-            <div class="service-price">R$ 35,00</div>
-          </div>
-          <button class="btn-service-schedule">Agendar</button>
-        </div>
+        <?php endforeach; ?>
 
       </div>
     </div>
   </div>
 
+  <div class="modal fade" id="agendarModal" tabindex="-1" aria-labelledby="agendarModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="agendarModalLabel">Agendamento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="profissionais-section"></div>
+          <div id="datas-section" style="display:none;">
+            <h6 id="data-title"></h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <button class="btn btn-sm btn-outline-secondary carousel-prev" type="button">
+                <span class="material-symbols-outlined">chevron_left</span>
+              </button>
+              <div class="date-carousel-container" style="overflow-x: auto; white-space: nowrap; flex-grow: 1; margin: 0 10px;">
+                <div class="date-carousel d-inline-flex"></div>
+              </div>
+              <button class="btn btn-sm btn-outline-secondary carousel-next" type="button">
+                <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+            <div id="horarios-disponiveis" style="margin-top: 20px;"></div>
+            <div class="text-center mt-3">
+              <button id="btn-voltar-profissionais" class="btn btn-link">Voltar para profissionais</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/barbearia.js"></script>
 </body>
 
