@@ -12,7 +12,7 @@ $usuario = Usuario::autenticar($email, $senha);
 if ($usuario) {
   $_SESSION['usuario_id'] = $usuario->getIdUsuario();
   $_SESSION['Tipo'] = $usuario->getTipo();
-  $_SESSION['usuario_nome'] = $usuario->getNome(); // 👉 adiciona isso
+  $_SESSION['usuario_nome'] = $usuario->getNome(); 
 
   if ($usuario->getTipo() === 'administrador') {
     echo json_encode([

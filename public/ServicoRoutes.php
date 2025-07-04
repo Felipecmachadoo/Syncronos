@@ -20,7 +20,7 @@ switch ($rota) {
     $idServico = $_POST['idServico'] ?? 0;
     $result = $controller->excluirServico($idServico);
     header('Content-Type: application/json');
-    echo $result; // Já está codificado como JSON pelo controller
+    echo $result; 
     break;
 
   case 'salvarServico':
@@ -28,6 +28,5 @@ switch ($rota) {
     break;
 
   default:
-    // Rota inválida
     break;
 }

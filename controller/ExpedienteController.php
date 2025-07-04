@@ -46,7 +46,6 @@ class ExpedienteController
         }
 
         if (in_array($dia, $diasExistentes)) {
-          // Atualização
           $stmt = $this->conexao->prepare("
                         UPDATE expediente SET
                             inicioExpediente = ?,

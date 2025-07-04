@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.textContent = "Cadastrando...";
 
       try {
-        // Coletar dados do formulário
         const formData = {
           nome: registerForm.nome.value,
           email: registerForm.email.value,
@@ -61,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Toggle de senha (opcional)
+  // Toggle de senha
   const togglePassword = document.getElementById("toggle-password");
   const passwordField = document.getElementById("password-input");
 

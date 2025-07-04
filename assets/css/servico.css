@@ -136,8 +136,6 @@ textarea.form-control {
 }
 
 /* Estilização do Dropdown */
-
-/* Estilo do container do dropdown */
 .dropdown {
   position: relative;
   width: 100%;
@@ -167,15 +165,15 @@ textarea.form-control {
   top: 100%;
   left: 0;
   width: 100%;
-  max-height: 150px; /* Limita o tamanho visível */
+  max-height: 150px;
   overflow-y: auto;
   background-color: #1d1d1d;
   border: 1px solid var(--cor-link-separator);
   border-radius: 6px;
-  display: none; /* Inicia escondido */
+  display: none;
 }
 
-/* Estilizando cada opção */
+/* Dropdown Options */
 .dropdown-option {
   padding: 10px;
   color: white;
@@ -245,7 +243,7 @@ textarea.form-control {
   }
 }
 
-/* Estilos da tabela de serviços - Adaptado do profissional.css */
+/* Estilos da tabela de serviços */
 .servico-lista-container {
   width: 100%;
   overflow-x: auto;
@@ -300,7 +298,7 @@ textarea.form-control {
   gap: 10px;
 }
 
-/* Botões de ação - versão sem ícones */
+/* Botões de ação */
 .servico-tabela .btn-editar,
 .servico-tabela .btn-excluir {
   padding: 8px 12px;

@@ -203,7 +203,7 @@ body {
 }
 
 .btnEditButton {
-  background-color: #f39c12; /* Laranja */
+  background-color: #f39c12;
   color: black;
   font-weight: 600;
   border: none;
@@ -214,7 +214,7 @@ body {
 }
 
 .btnDeleteButton {
-  background-color: #e74c3c; /* Laranja */
+  background-color: #e74c3c;
   color: black;
   font-weight: 600;
   border: none;
@@ -225,7 +225,7 @@ body {
 }
 
 .btnViewEvento {
-  background-color: white; /* Laranja */
+  background-color: white;
   color: black;
   font-weight: 600;
   border: none;
@@ -236,7 +236,7 @@ body {
 }
 
 .btnEditEvento {
-  background-color: var(--cor-gold); /* Laranja */
+  background-color: var(--cor-gold);
   color: black;
   font-weight: 600;
   border: none;
@@ -367,7 +367,7 @@ body {
   margin-top: 5px;
 }
 
-/* Formulário dentro do modal customizado */
+/* Formulário dentro do modal */
 .custom-modal .form-group {
   margin-bottom: 15px;
 }
@@ -420,7 +420,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Dropdown customizado */
+/* Dropdown */
 .dropdown-container {
   position: relative;
   margin-bottom: 20px;
@@ -524,7 +524,7 @@ body {
   filter: invert(1);
 }
 
-/* Responsividade para o modal customizado */
+/* Responsividade para o modal */
 @media (max-width: 768px) {
   .custom-modal-content {
     width: 95%;

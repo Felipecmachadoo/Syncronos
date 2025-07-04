@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 
 try {
   $controller = new HorarioController();
-  $horarios = $controller->buscarHorarios(); // Este método deve apenas retornar o array
+  $horarios = $controller->buscarHorarios(); 
 
   echo json_encode($horarios);
 } catch (Exception $e) {

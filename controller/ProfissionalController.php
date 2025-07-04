@@ -15,7 +15,7 @@ class ProfissionalController
 
   public function salvarProfissional()
   {
-    header('Content-Type: application/json'); // Adicione esta linha
+    header('Content-Type: application/json');
 
     try {
       $idProfissional = isset($_POST['idProfissional']) ? $_POST['idProfissional'] : null;
@@ -58,7 +58,7 @@ class ProfissionalController
     }
 
     $diasSelecionados = $_POST['profissional-dias'];
-    $idProfissional = $_POST['idProfissional']; // Você precisará enviar esse ID no formulário
+    $idProfissional = $_POST['idProfissional'];
 
     try {
       $this->conexao->beginTransaction();
@@ -83,7 +83,7 @@ class ProfissionalController
 
         // Validação básica
         if (empty($abertura) || empty($fechamento)) {
-          continue; // Pula dias sem horário definido
+          continue;
         }
 
         $stmtInsert->execute([

@@ -1,4 +1,4 @@
-// Funções do dropdown (fora do DOMContentLoaded para serem globais)
+// Funções do dropdown
 function toggleHours() {
   const hoursList = document.getElementById("hours-list");
   const toggleButton = document.querySelector(".hours-toggle");
@@ -49,7 +49,7 @@ async function loadBusinessHours() {
       throw new Error("Resposta vazia ou formato inválido");
     }
 
-    // Mapeamento dos dias da semana para números (FullCalendar usa 0 = domingo, 1 = segunda, etc)
+    // Mapeamento dos dias da semana para números
     const diasMap = {
       domingo: 0,
       segunda: 1,
@@ -117,7 +117,6 @@ function formatBusinessHours(horarios) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Elementos do DOM
   const agendarModalEl = document.getElementById("agendarModal");
   const agendarModal = new bootstrap.Modal(agendarModalEl);
   const profissionaisSection = document.getElementById("profissionais-section");
@@ -128,13 +127,11 @@ document.addEventListener("DOMContentLoaded", () => {
     "btn-voltar-profissionais"
   );
 
-  // Variáveis globais
   let profissionais = [];
   let profissionalSelecionado = null;
   let dataSelecionada = null;
   let servicoSelecionado = null;
 
-  // --- Funções Auxiliares ---
   function toggleUserDropdown() {
     const dropdownMenu = document.getElementById("userDropdownMenu");
     const dropdown = document.querySelector(".user-dropdown");
@@ -148,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Fechar dropdown ao clicar fora
+  // Fechar dropdown ao clicar fora do dropdown
   document.addEventListener("click", function (event) {
     const dropdown = document.querySelector(".user-dropdown");
     const dropdownMenu = document.getElementById("userDropdownMenu");
@@ -195,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return d;
   }
 
-  // --- Funções Principais ---
   async function carregarHorarios() {
     horariosSection.innerHTML = "<p>Carregando horários...</p>";
 

@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
 
       try {
-        // Mostrar loading
         submitBtn.disabled = true;
         submitBtn.textContent = "Autenticando...";
 
@@ -51,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Toggle de senha (mantido igual)
+  // Toggle de senha
   const togglePassword = document.getElementById("toggle-password");
   const passwordField = document.getElementById("password-input");
 

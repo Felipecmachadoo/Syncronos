@@ -1,9 +1,8 @@
 <?php
 
-// Incluir o arquivo com a conexão com banco de dados
 include_once '../../config/conexao.php';
 
-// Receber os dados enviado pelo JavaScript
+// Recebe os dados enviado pelo JavaScript
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
 // Validar se todos os campos obrigatórios foram enviados
@@ -20,7 +19,6 @@ if (strtotime($dados['edit_end']) < strtotime($dados['edit_start'])) {
     exit;
 }
 
-// Definir cor baseada no status
 $cores_status = [
     'confirmado' => '#3a8d60',
     'pendente' => '#f39c12',
@@ -30,7 +28,6 @@ $cores_status = [
 $cor = isset($cores_status[$dados['edit_status']]) ? $cores_status[$dados['edit_status']] : '#3a8d60';
 
 try {
-    // Instanciar a classe de conexão
     $conexao = new Conexao();
     $conn = $conexao->conectar();
 

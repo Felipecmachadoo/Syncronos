@@ -1,4 +1,3 @@
-// Variável para controlar se já configuramos os eventos
 let eventosConfigurados = false;
 
 const notyf = new Notyf({
@@ -9,11 +8,9 @@ const notyf = new Notyf({
   },
 });
 
-// Função para configurar tudo uma única vez
 function configurarServicos() {
   if (eventosConfigurados) return;
 
-  // Configura o offcanvas
   const btnAdicionar = document.getElementById("btnAdicionar");
   const offcanvas = document.getElementById("offcanvas");
   const offcanvasOverlay = document.getElementById("offcanvasOverlay");

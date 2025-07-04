@@ -1,6 +1,5 @@
 <?php
 
-// Incluir o arquivo com a conexão com banco de dados
 include_once '../../config/conexao.php';
 
 // Receber os dados enviado pelo JavaScript
@@ -30,7 +29,6 @@ $cores_status = [
 $cor = isset($cores_status[$dados['cad_status']]) ? $cores_status[$dados['cad_status']] : '#3a8d60';
 
 try {
-    // Instanciar a classe de conexão
     $conexao = new Conexao();
     $conn = $conexao->conectar();
 
@@ -40,14 +38,14 @@ try {
     // Prepara a QUERY
     $cad_event = $conn->prepare($query_cad_event);
 
-    // Substituir o link pelo valor
+    // Substituir os parâmetros pelo valor
     $cad_event->bindParam(':titulo', $dados['cad_title'], PDO::PARAM_STR);
     $cad_event->bindParam(':cor', $cor, PDO::PARAM_STR);
     $cad_event->bindParam(':dataInicio', $dados['cad_start'], PDO::PARAM_STR);
     $cad_event->bindParam(':dataFim', $dados['cad_end'], PDO::PARAM_STR);
     $cad_event->bindParam(':status', $dados['cad_status'], PDO::PARAM_STR);
 
-    // Verificar se consegui cadastrar corretamente
+    // Verifica se conseguiu cadastrar corretamente
     if ($cad_event->execute()) {
         $retorna = [
             'status' => true,

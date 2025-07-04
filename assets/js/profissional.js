@@ -1,12 +1,9 @@
-// Configuração inicial
 const notyf = new Notyf({
   duration: 3000,
   position: { x: "right", y: "top" },
 });
 
-// Função principal
 function configurarProfissional() {
-  // Elementos DOM
   const elements = {
     openOffcanvas: document.getElementById("profissional-open-offcanvas"),
     closeOffcanvas: document.getElementById("profissional-close-offcanvas"),
@@ -376,7 +373,7 @@ function configurarProfissional() {
   configurarDropdownsHorarios();
 }
 
-// Funções de utilidade
+// Função de mascara de telefone
 function applyPhoneMask() {
   const celular = document.getElementById("profissional-celular");
   if (!celular) return;

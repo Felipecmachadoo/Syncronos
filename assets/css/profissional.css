@@ -409,7 +409,7 @@ label {
   }
 }
 
-/* Dropdown Styling */
+/* Dropdown */
 .profissional-dropdown-container {
   position: relative;
   width: 100%;
@@ -493,7 +493,7 @@ label {
 
 .profissional-search-input {
   width: 100%;
-  padding-right: 30px; /* espaço pro ícone */
+  padding-right: 30px;
   box-sizing: border-box;
 }
 
@@ -590,6 +590,7 @@ input::placeholder {
     font-size: 14px;
   }
 }
+
 .profissional-lista-container {
   width: 100%;
   overflow-x: auto;

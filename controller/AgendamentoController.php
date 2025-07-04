@@ -2,9 +2,8 @@
 session_start();
 require_once __DIR__ . '/../model/Agendamento.php';
 
-// Configurações iniciais
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Não exibe erros na resposta
+ini_set('display_errors', 0); 
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../../logs/php_errors.log');
 header('Content-Type: application/json; charset=utf-8');
@@ -34,9 +33,6 @@ try {
     throw new Exception('JSON inválido: ' . json_last_error_msg(), 400);
   }
 
-  // Log dos dados recebidos (apenas para debug)
-  error_log('Dados recebidos: ' . print_r($data, true));
-
   // Campos obrigatórios
   $requiredFields = ['idServico', 'idProfissional', 'Titulo', 'dataInicio', 'dataFim'];
   foreach ($requiredFields as $field) {
@@ -45,7 +41,7 @@ try {
     }
   }
 
-  // Processamento das datas - considera o horário local (America/Sao_Paulo)
+  // Processamento das datas
   try {
     $dataInicio = DateTime::createFromFormat(
       'Y-m-d H:i:s',
@@ -76,14 +72,11 @@ try {
     'idServico' => (int)$data['idServico'],
     'idProfissional' => (int)$data['idProfissional'],
     'Titulo' => filter_var($data['Titulo'], FILTER_SANITIZE_STRING),
-    'Cor' => '#3a8d60', // Cor fixa
+    'Cor' => '#3a8d60',
     'dataInicio' => $dataInicioStr,
     'dataFim' => $dataFimStr,
     'Status' => 'confirmado'
   ];
-
-  // Log dos dados processados (apenas para debug)
-  error_log('Dados do agendamento: ' . print_r($agendamentoData, true));
 
   // Instancia o modelo
   $agendamentoModel = new AgendamentoModel();

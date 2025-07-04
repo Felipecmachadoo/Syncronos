@@ -43,7 +43,6 @@ class ServicoController
 
         $mensagem = "Serviço atualizado com sucesso";
       } else {
-        // CRIAR NOVO SERVIÇO
         $stmt = $this->conexao->prepare(
           "INSERT INTO servicos 
                 (nome, descricao, preco, duracao) 
@@ -85,7 +84,6 @@ class ServicoController
       $stmt->execute([$idServico]);
       $servico = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      // Garanta que está retornando os dados corretamente
       if ($servico) {
         header('Content-Type: application/json');
         echo json_encode($servico);
@@ -121,7 +119,6 @@ class ServicoController
         ]);
       }
     } catch (PDOException $e) {
-      // Log do erro completo
       error_log("Erro ao excluir serviço: " . $e->getMessage());
 
       return json_encode([

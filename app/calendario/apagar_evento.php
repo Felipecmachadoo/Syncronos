@@ -1,15 +1,12 @@
 <?php
 
-// Incluir o arquivo com a conexão com banco de dados
 include_once '../../config/conexao.php';
 
-// Receber o id enviado pelo JavaScript
 $id = filter_input(INPUT_GET, 'idAgendamento', FILTER_SANITIZE_NUMBER_INT);
 
 // Acessa o IF quando existe o id do evento
 if (!empty($id)) {
     try {
-        // Instanciar a classe de conexão
         $conexao = new Conexao();
         $conn = $conexao->conectar();
 

@@ -153,9 +153,8 @@ class HorarioController
   public function buscarHorarios()
   {
     try {
-      return $this->obterHorarios(); // Retorna array associativo com os horários
+      return $this->obterHorarios();
     } catch (Exception $e) {
-      // Retorna array vazio em caso de erro (ou você pode lançar a exceção se preferir)
       return [];
     }
   }

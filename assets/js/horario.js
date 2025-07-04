@@ -1,7 +1,5 @@
-// Variável para controlar se já configuramos os eventos
 let horariosConfigurados = false;
 
-// Função para configurar tudo uma única vez
 function configurarHorarios() {
   if (horariosConfigurados) return;
 
@@ -29,16 +27,16 @@ function configurarHorarios() {
         .closest(".column-item")
         .querySelector(".dropdown-options");
       if (dropdown) {
-        dropdown.innerHTML = ""; // Limpa os dropdowns antes de adicionar novos itens
+        dropdown.innerHTML = "";
 
         horarios.forEach((horario) => {
           const option = document.createElement("div");
           option.textContent = horario;
           option.classList.add("dropdown-option");
           option.onclick = function () {
-            input.value = horario; // Atribui o valor selecionado ao input
-            input.dataset.selected = horario; // Armazena o valor selecionado
-            input.placeholder = "00:00h"; // Reseta o placeholder
+            input.value = horario;
+            input.dataset.selected = horario;
+            input.placeholder = "00:00h";
             hideDropdown(input);
           };
           dropdown.appendChild(option);
@@ -56,7 +54,6 @@ function configurarHorarios() {
         dropdown.classList.remove("show");
       });
 
-      // Abre o dropdown do item selecionado
       const dropdown = inputElement
         .closest(".column-item")
         .querySelector(".dropdown-options");
@@ -164,11 +161,9 @@ function configurarHorarios() {
 
   // Função para validar os dados do formulário
   function validarFormulario(dados) {
-    // Verificar se há dias desmarcados
     const diasDesmarcados = getDiasDesmarcados();
 
-    // Se não há dias selecionados, mas há dias desmarcados, permitir o salvamento
-    // (isso significa que o usuário está removendo dias)
+    // Se não há dias selecionados, mas há dias desmarcados, permitir o salvamento (isso significa que o usuário está removendo os dias selecionados)
     if (dados.dias.length === 0 && diasDesmarcados.length > 0) {
       return true;
     }
@@ -272,10 +267,9 @@ function configurarHorarios() {
     }
   }
 
-  // Função para salvar os dados (exemplo com localStorage)
+  // Função para salvar os dados no localStorage
   function salvarDados(dados) {
     try {
-      // Verificar se há dias desmarcados
       const diasDesmarcados = getDiasDesmarcados();
 
       // Se todos os dias foram desmarcados, limpar completamente os dados
@@ -305,8 +299,7 @@ function configurarHorarios() {
         // Manter os horários dos dias que não foram alterados
         Object.keys(dadosAnteriores.horarios || {}).forEach((dia) => {
           if (!dados.dias.includes(dia) && !diasDesmarcados.includes(dia)) {
-            // Se o dia não está nos dias selecionados atuais e não foi desmarcado,
-            // manter os horários anteriores
+            // Se o dia não está nos dias selecionados atuais e não foi desmarcado, manter os horários anteriores
             dadosAtualizados.horarios[dia] = dadosAnteriores.horarios[dia];
           }
         });
@@ -460,9 +453,9 @@ function configurarHorarios() {
       setTimeout(() => {
         if (!input.value && input.dataset.selected) {
           input.value = input.dataset.selected;
-          input.placeholder = "00:00h"; // Volta ao padrão
+          input.placeholder = "00:00h";
         }
-      }, 150); // Aguarda a seleção antes de resetar
+      }, 150);
     });
   });
 
@@ -504,7 +497,6 @@ function configurarHorarios() {
   });
 
   // Configura evento ao botão de salvar
-  // Configura evento ao botão de salvar
   const saveButton = document.getElementById("save-button");
   if (saveButton) {
     // Remove evento antigo
@@ -535,7 +527,7 @@ function configurarHorarios() {
       // Verificar se há dias desmarcados antes de validar
       if (validarFormulario(dados)) {
         salvarDados(dados);
-        form.submit(); // Envia o formulário normalmente
+        form.submit();
       }
     });
   }

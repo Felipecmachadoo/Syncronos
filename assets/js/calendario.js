@@ -1,6 +1,4 @@
-// Executar quando o documento HTML for completamente carregado
 document.addEventListener("DOMContentLoaded", function () {
-  // Receber o SELETOR calendar do atributo id
   var calendarEl = document.getElementById("calendar");
 
   // Receber os seletores dos modais

@@ -5,7 +5,6 @@ try {
     $conexao = new Conexao();
     $conn = $conexao->conectar();
 
-    // Agora buscamos também o nome do usuário
     $query_events = "
         SELECT 
             ag.idAgendamento, 
@@ -35,7 +34,7 @@ try {
             'extendedProps' => [
                 'status' => $row_events['status'],
                 'idUsuario' => $row_events['idUsuario'],
-                'nomeUsuario' => $row_events['nomeUsuario'], // Agora temos o nome!
+                'nomeUsuario' => $row_events['nomeUsuario'],
             ]
         ];
     }
