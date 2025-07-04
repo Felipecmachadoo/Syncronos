@@ -1,5 +1,17 @@
 <?php
-require_once __DIR__ . '/../controller/HorarioController.php';
+require_once '../controller/HorarioController.php';
 
-$horarioController = new HorarioController();
-$horarioController->buscarHorarios(); // Só isso. O método já imprime o JSON e faz exit
+header('Content-Type: application/json');
+
+try {
+  $controller = new HorarioController();
+  $horarios = $controller->buscarHorarios(); // Este método deve apenas retornar o array
+
+  echo json_encode($horarios);
+} catch (Exception $e) {
+  http_response_code(500);
+  echo json_encode([
+    'success' => false,
+    'error' => 'Erro ao buscar horários: ' . $e->getMessage()
+  ]);
+}

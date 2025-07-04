@@ -153,27 +153,12 @@ class HorarioController
   public function buscarHorarios()
   {
     try {
-      $horarios = $this->obterHorarios(); // Corrigido: agora busca de um método auxiliar
-
-      if (empty($horarios)) {
-        throw new Exception('Nenhum horário cadastrado');
-      }
-
-      header('Content-Type: application/json');
-      echo json_encode($horarios);
-      exit;
+      return $this->obterHorarios(); // Retorna array associativo com os horários
     } catch (Exception $e) {
-      header('Content-Type: application/json');
-      http_response_code(500);
-      echo json_encode([
-        'success' => false,
-        'error' => $e->getMessage()
-      ]);
-      exit;
+      // Retorna array vazio em caso de erro (ou você pode lançar a exceção se preferir)
+      return [];
     }
   }
-
-
 
   private function obterHorarios(): array
   {
@@ -182,10 +167,6 @@ class HorarioController
     $stmt->closeCursor();
     return $horarios;
   }
-
-
-
-
 
   private function removerHorario(string $diaSemana): void
   {

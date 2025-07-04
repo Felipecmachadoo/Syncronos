@@ -338,41 +338,62 @@ function configurarHorarios() {
   // Função para carregar dados salvos anteriormente
   function carregarDadosSalvos() {
     try {
+      // Primeiro tenta carregar do localStorage
       const dadosSalvos = localStorage.getItem("horariosFuncionamento");
+      let dados = null;
 
       if (dadosSalvos) {
-        const dados = JSON.parse(dadosSalvos);
+        dados = JSON.parse(dadosSalvos);
+      } else if (
+        typeof dadosDoBanco !== "undefined" &&
+        Array.isArray(dadosDoBanco)
+      ) {
+        dados = {
+          dias: [],
+          horarios: {},
+        };
 
-        // Marcar os dias selecionados
-        dados.dias.forEach((dia) => {
-          const checkbox = document.querySelector(`input[value="${dia}"]`);
-          if (checkbox) {
-            checkbox.checked = true;
-          }
-        });
-
-        // Preencher os horários
-        Object.keys(dados.horarios).forEach((dia) => {
-          const horarios = dados.horarios[dia];
-
-          const aberturaInput = document.querySelector(
-            `input[name="abertura_${dia}"]`
-          );
-          const fechamentoInput = document.querySelector(
-            `input[name="fechamento_${dia}"]`
-          );
-
-          if (aberturaInput && horarios.abertura) {
-            aberturaInput.value = horarios.abertura;
-            aberturaInput.dataset.selected = horarios.abertura;
-          }
-
-          if (fechamentoInput && horarios.fechamento) {
-            fechamentoInput.value = horarios.fechamento;
-            fechamentoInput.dataset.selected = horarios.fechamento;
-          }
+        dadosDoBanco.forEach((item) => {
+          const dia = item.diaSemana;
+          dados.dias.push(dia);
+          dados.horarios[dia] = {
+            abertura: item.horaInicio,
+            fechamento: item.horaFim,
+          };
         });
       }
+
+      if (!dados) return;
+
+      // Marcar os dias selecionados
+      dados.dias.forEach((dia) => {
+        const checkbox = document.querySelector(`input[value="${dia}"]`);
+        if (checkbox) {
+          checkbox.checked = true;
+        }
+      });
+
+      // Preencher os horários
+      Object.keys(dados.horarios).forEach((dia) => {
+        const horarios = dados.horarios[dia];
+
+        const aberturaInput = document.querySelector(
+          `input[name="abertura_${dia}"]`
+        );
+        const fechamentoInput = document.querySelector(
+          `input[name="fechamento_${dia}"]`
+        );
+
+        if (aberturaInput && horarios.abertura) {
+          aberturaInput.value = horarios.abertura;
+          aberturaInput.dataset.selected = horarios.abertura;
+        }
+
+        if (fechamentoInput && horarios.fechamento) {
+          fechamentoInput.value = horarios.fechamento;
+          fechamentoInput.dataset.selected = horarios.fechamento;
+        }
+      });
     } catch (error) {
       mostrarFeedback("Erro ao carregar dados salvos.", "error");
     }

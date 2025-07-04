@@ -701,6 +701,11 @@ if (!isset($_SESSION['Tipo']) || $_SESSION['Tipo'] !== 'administrador') {
 
   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
   <script src="../assets/js/horario.js"></script>
+
+  <script>
+    const dadosDoBanco = <?php echo json_encode($horariosSalvos); ?>;
+  </script>
+
 </body>
 
 </html>

@@ -7,7 +7,31 @@ function toggleHours() {
     hoursList.style.display = "block";
     toggleButton.innerHTML = "Horários de funcionamento ▲";
     if (!hoursList.hasAttribute("data-loaded")) {
-      loadBusinessHours();
+      loadBusinessHours().then((horarios) => {
+        // Agrupa os horários por dia
+        const agrupados = {};
+
+        horarios.forEach((h) => {
+          const diaNum = h.daysOfWeek[0];
+          const diasMapReverso = {
+            0: "domingo",
+            1: "segunda",
+            2: "terca",
+            3: "quarta",
+            4: "quinta",
+            5: "sexta",
+            6: "sabado",
+          };
+          const dia = diasMapReverso[diaNum];
+          agrupados[dia] = {
+            abertura: h.startTime,
+            fechamento: h.endTime,
+          };
+        });
+
+        hoursList.innerHTML = formatBusinessHours(agrupados);
+        hoursList.setAttribute("data-loaded", "true");
+      });
     }
   } else {
     hoursList.style.display = "none";
