@@ -24,11 +24,12 @@ O **Syncronos** é um sistema web de agendamentos desenvolvido para barbearias, 
 
 ---
 
-## 📸 Demonstração
-Página de Login
-<img width="752" height="534" alt="image" src="https://github.com/user-attachments/assets/f14913e9-013e-4ad0-80f1-1f73db69792f" />
+## 📸 Demonstração <br>
 
-Agenda
+Página de Login
+<img width="897" height="534" alt="image" src="https://github.com/user-attachments/assets/f14913e9-013e-4ad0-80f1-1f73db69792f" />
+
+Cadastro de Agendamentos
 <img width="1019" height="609" alt="image" src="https://github.com/user-attachments/assets/be501a9c-32c6-4236-99bf-c219022fa5c4" />
 
 Horários do Estabelecimento
