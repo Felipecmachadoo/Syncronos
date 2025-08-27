@@ -20,7 +20,6 @@ O **Syncronos** é um sistema web de agendamentos desenvolvido para barbearias, 
 ## 🖥️ Tecnologias Utilizadas
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap, FullCalendar
 - **Backend:** PHP (MVC), MySQL
-- **Outros:** Mithril.js (SPA), integração com modais e rotas dinâmicas
 
 ---
 
