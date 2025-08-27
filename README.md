@@ -25,7 +25,35 @@ O **Syncronos** é um sistema web de agendamentos desenvolvido para barbearias, 
 ---
 
 ## 📸 Demonstração
-(👉 Aqui você pode colocar prints do sistema – login, agenda, cadastro de serviços, etc. – ou até GIFs mostrando a navegação.)
+Página de Login
+<img width="752" height="534" alt="image" src="https://github.com/user-attachments/assets/f14913e9-013e-4ad0-80f1-1f73db69792f" />
+
+Agenda
+<img width="1019" height="609" alt="image" src="https://github.com/user-attachments/assets/be501a9c-32c6-4236-99bf-c219022fa5c4" />
+
+Horários do Estabelecimento
+<img width="1014" height="570" alt="image" src="https://github.com/user-attachments/assets/25e46687-7983-4cbc-8d1b-b741f3115232" />
+
+Cadastro de Serviços
+<img width="1038" height="617" alt="image" src="https://github.com/user-attachments/assets/601c2304-0f72-4b31-a890-854e56db7c1d" />
+
+Cadastro de Profissionais
+<img width="1012" height="620" alt="image" src="https://github.com/user-attachments/assets/e31d3c53-e6d9-48dd-8e92-14583a796e20" />
+
+Cadastro do Expediente dos Profissionais
+<img width="1007" height="616" alt="image" src="https://github.com/user-attachments/assets/a9950989-81ad-4e13-adf5-bbbe05a13207" />
+
+Página do Estabelecimento
+<img width="1016" height="598" alt="image" src="https://github.com/user-attachments/assets/5e22cd68-deca-4a04-be8e-346b81d7cd3d" />
+
+Agendar Serviço (Cliente)
+<img width="989" height="556" alt="image" src="https://github.com/user-attachments/assets/e497cbe8-a0df-458b-b9a9-9ede7f983092" />
+
+Página para Selecionar Horários do Agendamento (Cliente)
+<img width="944" height="531" alt="image" src="https://github.com/user-attachments/assets/0ea36649-1452-40ad-8f8e-a8c0a077bc50" />
+
+Confirmação do Agendamento
+<img width="1000" height="563" alt="image" src="https://github.com/user-attachments/assets/8de6e310-9184-442f-b157-7455694a9333" />
 
 ---
 
